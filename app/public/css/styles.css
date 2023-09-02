@@ -1,0 +1,23 @@
+body {
+  font-family: 'Quicksand', sans-serif;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+th,
+td {
+  border: 2px solid #bbb;
+  background: white;
+  padding: 8px;
+  text-align: start;
+}
+
+tr.blue-background th {
+  background-color: rgb(87, 87, 236);
+  color: white;
+}

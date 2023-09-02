@@ -1,0 +1,52 @@
+<div class="container">
+  <h1 class="mt-4">Home Page</h1>
+  <hr>
+  <table class="mb-4">
+    <thead>
+      <tr class="blue-background">
+        <th class="col">#</th>
+        <th class="col">First Name</th>
+        <th class="col">Last Name</th>
+        <th class="col">Gender</th>
+        <th class="col">Birth Date</th>
+        <th class="col">Email</th>
+        <th class="col">User Name</th>
+        <th class="col">IP</th>
+        <th class="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {%HOME_TABLE%}
+    </tbody>
+  </table>
+
+  {%USER_DETAILS%}
+</div>
+
+
+
+<style>
+  body {
+    font-family: 'Quicksand', sans-serif;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  th,
+  td {
+    border: 2px solid #bbb;
+    background: white;
+    padding: 8px;
+    text-align: start;
+  }
+
+  tr.blue-background th {
+    background-color: rgb(87, 87, 236);
+    color: white;
+  }
+</style>
