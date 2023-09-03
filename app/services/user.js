@@ -2,113 +2,65 @@ const User = require('../models/user');
 const { checkAndFilterQuery, isEmptyObject } = require('../services/common');
 const { handleInternalServerError, handlePaginationError } = require('../helpers/errorHandler');
 
-const filterUser = (req, res) => {
-    if (isEmptyObject(req.query)) {
-        return listUsers(req.query, res);
-    }
+const filterUser = async (req, res) => {
+    try {
 
-    if (checkFieldsQuery(req)) {
-        return fieldsQuery(req, res);
-    }
+        if (isEmptyObject(req.query)) {
+            return listUsers(req.query, res);
+        }
 
-    if (checkSortQuery(req)) {
-        return sortQuery(req, res);
-    }
+        const filteredQuery = checkAndFilterQuery(User.schema, req.query);
 
-    if (checkPaginationQuery(req)) {
-        return paginationQuery(req, res);
-    }
+        const selectFields = getSelectFields(req.query);
+        const sortFields = getSortFields(req.query);
+        const skipValue = getSkipValue(req.query);
 
-    filterQuery(req, res);
+        const totalRecords = await User.countDocuments(filteredQuery);
+
+        if (skipValue >= totalRecords) {
+            return handlePaginationError(res);
+        }
+
+        const result = await User.find(filteredQuery)
+            .sort(sortFields)
+            .select(selectFields)
+            .skip(skipValue)
+            .limit(req.query.limit);
+
+        return sendResponse(res, result);
+    } catch (error) {
+        return handleInternalServerError(res);
+    }
 };
 
 const listUsers = async (query, res) => {
     try {
         const filterResult = await User.find(query).select('-__v');
-        return res.status(200).json({
-            status: 'success',
-            results: filterResult.length,
-            data: filterResult,
-        });
+        return sendResponse(res, filterResult);
     } catch (error) {
         return handleInternalServerError(res);
     }
 };
 
-const filterQuery = (req, res) => {
-    const filteredQuery = checkAndFilterQuery(User.schema, req.query);
-
-    if (isEmptyObject(filteredQuery)) {
-        return res.status(200).json({
-            status: 'success',
-            results: 0,
-            data: [],
-        });
-    }
-
-    listUsers(filteredQuery, res);
+const getSelectFields = (query) => {
+    return query.fields ? query.fields.split(',').join(' ') : '-__v';
 };
 
-const sortQuery = async (req, res) => {
-    try {
-        const sortBy = req.query.sort.split(',').join(' ');
-        const sortedResult = await User.find().sort(sortBy).select('-__v');
-
-        return res.status(200).json({
-            status: 'success',
-            results: sortedResult.length,
-            data: sortedResult,
-        });
-    } catch (error) {
-        return handleInternalServerError(res);
-    }
+const getSortFields = (query) => {
+    return query.sort ? query.sort.split(',').join(' ') : '_id';
 };
 
-const fieldsQuery = async (req, res) => {
-    try {
-        const fields = req.query.fields.split(',').join(' ');
-        const result = await User.find().select(fields).select('-__v');
-
-        return res.status(200).json({
-            status: 'success',
-            results: result.length,
-            data: result,
-        });
-    } catch (error) {
-        return handleInternalServerError(res);
-    }
+const getSkipValue = (query) => {
+    return (query.page - 1) * query.limit;
 };
 
-const paginationQuery = async (req, res) => {
-    try {
-        const page = req.query.page || 1;
-        const limit = req.query.limit || 20;
-        const skip = (page - 1) * limit;
-        const result = await User.find().skip(skip).limit(limit).select('-__v');
-        if (result.length === 0) {
-            return handlePaginationError(res);
-        }
-
-        return res.status(200).json({
-            status: 'success',
-            results: result.length,
-            data: result,
-        });
-    } catch (error) {
-        return handleInternalServerError(res);
-    }
-};
-
-const checkSortQuery = (req) => {
-    return req.query.sort && typeof req.query.sort === 'string';
-};
-
-const checkFieldsQuery = (req) => {
-    return req.query.fields && typeof req.query.fields === 'string';
-};
-
-const checkPaginationQuery = (req) => {
-    return +req.query.page && +req.query.limit;
+const sendResponse = (res, data) => {
+    const responseData = {
+        status: 'success',
+        results: data.length,
+        data: data
+    };
+    return res.status(200).json(responseData);
 };
 
 module.exports = {
