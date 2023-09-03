@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-const { getOldestUsers } = require('../middlewares/user.middleware');
 const userController = require('./../controllers/user.controller');
+const { getOldestUsers, getActiveUsers } = require('../middlewares/user.middleware');
 
 router
-    .get('/oldest-users', getOldestUsers, userController.listUsers)
+    .get('/active-users', getActiveUsers, userController.listUsers)
+    .get('/oldest-users', getOldestUsers, userController.listUsers);
+
+router
     .get('/', userController.listUsers)
     .get('/:id', userController.getUser)
     .post('/', userController.createUser)
