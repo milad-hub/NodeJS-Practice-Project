@@ -32,6 +32,35 @@ const userSchema = new mongoose.Schema({
 
 });
 
-const userModel = mongoose.model('users', userSchema);
+const UserStatsAggregateOptions = [
+    {
+        $group: {
+            _id: null,
+            totalUsers: { $sum: 1 },
+            totalActiveUsers: {
+                $sum: {
+                    $cond: { if: { $eq: ["$isActive", true] }, then: 1, else: 0 }
+                }
+            },
+            maxAge: { $max: "$age" },
+            minAge: { $min: "$age" },
+            avgAge: { $avg: "$age" }
+        }
+    },
+    {
+        $project: {
+            totalUsers: 1,
+            totalActiveUsers: 1,
+            maxAge: 1,
+            minAge: 1,
+            avgAge: { $round: ["$avgAge", 2] }
+        }
+    }
+];
 
-module.exports = userModel;
+const User = mongoose.model('users', userSchema);
+
+module.exports = {
+    User,
+    UserStatsAggregateOptions
+};

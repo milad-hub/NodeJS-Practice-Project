@@ -1,4 +1,4 @@
-const User = require('../models/user');
+const { User } = require('../models/user');
 const { checkAndFilterQuery, isEmptyObject } = require('../services/common');
 const { handleInternalServerError, handlePaginationError } = require('../helpers/errorHandler');
 
