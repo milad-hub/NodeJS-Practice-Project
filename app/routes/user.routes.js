@@ -9,7 +9,8 @@ router
     .get('/oldest-users', getOldestUsers, userController.listUsers);
 
 router
-    .get('/stats', userAggregationController.getUserStats);
+    .get('/stats', userAggregationController.getUserStats)
+    .get('/age/:age', userAggregationController.getUserDobFilter);
 
 router
     .get('/', userController.listUsers)

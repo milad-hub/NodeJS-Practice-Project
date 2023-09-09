@@ -1,4 +1,4 @@
-const { User, UserStatsAggregateOptions } = require('../models/user');
+const { User, UserStatsAggregateOptions, UserAgeAggregateOptions } = require('../models/user');
 const { filterUser } = require('../services/user');
 const { checkUserExists, checkSchemaMatch } = require('../services/common');
 const { handleInternalServerError } = require('../helpers/errorHandler');
@@ -83,10 +83,24 @@ const userAggregationController = {
 
     getUserStats: async (req, res) => {
         try {
-            const stats = await User.aggregate(UserStatsAggregateOptions);
+            const result = await User.aggregate(UserStatsAggregateOptions);
             res.json({
                 status: "success",
-                data: stats
+                data: result
+            });
+        } catch (error) {
+            handleInternalServerError(res, error);
+        }
+    },
+
+    getUserDobFilter: async (req, res) => {
+        try {
+            const age = +req.params.age;
+            const result = await User.aggregate(UserAgeAggregateOptions(age));
+            res.json({
+                status: "success",
+                results: result.length,
+                data: result
             });
         } catch (error) {
             handleInternalServerError(res, error);

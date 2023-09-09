@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
 
+    id: {
+        type: String,
+        select: false
+    },
     firstName: {
         type: String,
         required: true
@@ -12,7 +16,13 @@ const userSchema = new mongoose.Schema({
     },
     age: {
         type: Number,
-        required: true
+        required: true,
+        validate: {
+            validator: function (value) {
+                return value >= 18 && value <= 100;
+            },
+            message: 'Age must be between 18 and 100'
+        }
     },
     email: {
         type: String,
@@ -28,8 +38,24 @@ const userSchema = new mongoose.Schema({
         default: false,
         required: true,
         select: false
+    },
+    createdAt: {
+        type: Date,
+        required: true,
+        default: Date.now()
     }
 
+},
+    { toJSON: { virtuals: true } });
+
+userSchema.virtual('fullName').get(function () {
+    return `${this.firstName} ${this.lastName}`;
+});
+
+// this is just for testing pre method
+userSchema.pre('save', function (next) {
+    this.createdAt = new Date();
+    next();
 });
 
 const UserStatsAggregateOptions = [
@@ -58,9 +84,38 @@ const UserStatsAggregateOptions = [
     }
 ];
 
+const UserAgeAggregateOptions = (age) => [
+    {
+        $match: {
+            age: age
+        }
+    },
+    {
+        $sort: { lastName: 1 }
+    },
+    {
+        $addFields: {
+            fullName: { $concat: ["$firstName", " ", "$lastName"] },
+            age: "$age",
+            email: "$email",
+            hobbies: "$hobbies"
+        }
+    },
+    {
+        $project: {
+            _id: 0,
+            fullName: 1,
+            age: 1,
+            email: 1,
+            hobbies: 1
+        }
+    }
+];
+
 const User = mongoose.model('users', userSchema);
 
 module.exports = {
     User,
-    UserStatsAggregateOptions
+    UserStatsAggregateOptions,
+    UserAgeAggregateOptions
 };
