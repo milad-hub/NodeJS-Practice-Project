@@ -3,18 +3,16 @@ const { filterUser } = require('../services/user');
 const { checkUserExists, checkSchemaMatch } = require('../services/common');
 const { handleInternalServerError } = require('../helpers/errorHandler');
 
-const userController = {
-
-    listUsers: async (req, res) => {
+class UserController {
+    async listUsers(req, res) {
         try {
-            filterUser(req, res);
-        }
-        catch (error) {
+            await filterUser(req, res);
+        } catch (error) {
             handleInternalServerError(res, error);
         }
-    },
+    }
 
-    getUser: async (req, res) => {
+    async getUser(req, res) {
         try {
             const user = await User.findById(req.params.id);
             checkUserExists(user);
@@ -23,13 +21,12 @@ const userController = {
                 status: "success",
                 data: user
             });
-        }
-        catch (error) {
+        } catch (error) {
             handleInternalServerError(res, error);
         }
-    },
+    }
 
-    createUser: async (req, res) => {
+    async createUser(req, res) {
         try {
             const data = Array.isArray(req.body) ? req.body : [req.body];
             for (const obj of data) {
@@ -43,9 +40,9 @@ const userController = {
         } catch (error) {
             handleInternalServerError(res, error);
         }
-    },
+    }
 
-    updateUser: async (req, res) => {
+    async updateUser(req, res) {
         try {
             const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
                 new: true,
@@ -57,13 +54,12 @@ const userController = {
                 status: "success",
                 data: updatedUser
             });
-        }
-        catch (error) {
+        } catch (error) {
             handleInternalServerError(res, error);
         }
-    },
+    }
 
-    deleteUser: async (req, res) => {
+    async deleteUser(req, res) {
         try {
             const deletedUser = await User.findByIdAndDelete(req.params.id);
             checkUserExists(deletedUser);
@@ -72,32 +68,30 @@ const userController = {
                 status: "success",
                 data: deletedUser
             });
-        }
-        catch (error) {
+        } catch (error) {
             handleInternalServerError(res, error);
         }
     }
-};
+}
 
-const userAggregationController = {
-
-    getUserStats: async (req, res) => {
+class UserAggregationController {
+    async getUserStats(req, res) {
         try {
             const result = await User.aggregate(UserStatsAggregateOptions);
-            res.json({
+            res.status(200).json({
                 status: "success",
                 data: result
             });
         } catch (error) {
             handleInternalServerError(res, error);
         }
-    },
+    }
 
-    getUserDobFilter: async (req, res) => {
+    async getUserDobFilter(req, res) {
         try {
             const age = +req.params.age;
             const result = await User.aggregate(UserAgeAggregateOptions(age));
-            res.json({
+            res.status(200).json({
                 status: "success",
                 results: result.length,
                 data: result
@@ -105,11 +99,10 @@ const userAggregationController = {
         } catch (error) {
             handleInternalServerError(res, error);
         }
-    },
-};
+    }
+}
 
+const userController = new UserController();
+const userAggregationController = new UserAggregationController();
 
-module.exports = {
-    userController,
-    userAggregationController
-};
+module.exports = { userController, userAggregationController };
