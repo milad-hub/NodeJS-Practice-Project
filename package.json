@@ -5,11 +5,13 @@
   "main": "server.js",
   "scripts": {
     "app:dev": "nodemon server.js",
-    "app:prod": "set NODE_ENV=production && nodemon server.js"
+    "app:prod": "set NODE_ENV=production && nodemon server.js",
+    "debug": "ndb server.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "ndb": "^1.1.5",
     "nodemon": "^3.0.1"
   },
   "dependencies": {
