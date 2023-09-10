@@ -1,12 +1,12 @@
 const { User, UserStatsAggregateOptions, UserAgeAggregateOptions } = require('../models/user');
-const { filterUser } = require('../services/user');
+const { userServices } = require('../services/user');
 const { checkUserExists, checkSchemaMatch } = require('../services/common');
 const { handleInternalServerError } = require('../helpers/errorHandler');
 
 class UserController {
     async listUsers(req, res) {
         try {
-            await filterUser(req, res);
+            await userServices.filterUser(req, res);
         } catch (error) {
             handleInternalServerError(res, error);
         }
