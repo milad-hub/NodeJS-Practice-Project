@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const { userController, userAggregationController } = require('./../controllers/user.controller');
+const { UserController, UserAggregationController } = require('./../controllers/user.controller');
 const { getOldestUsers, getActiveUsers } = require('../middlewares/user.middleware');
+
+const userController = new UserController();
+const userAggregationController = new UserAggregationController();
 
 router
     .get('/active-users', getActiveUsers, userController.listUsers)
@@ -10,7 +13,7 @@ router
 
 router
     .get('/stats', userAggregationController.getUserStats)
-    .get('/age/:age', userAggregationController.getUserDobFilter);
+    .get('/age/:age', userAggregationController.getFilterUserByAge);
 
 router
     .get('/', userController.listUsers)

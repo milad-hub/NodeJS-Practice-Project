@@ -64,8 +64,6 @@ class UserServices {
     }
 }
 
-const _userServices = new UserServices();
-
 module.exports = {
-    _userServices
+    UserServices
 };
