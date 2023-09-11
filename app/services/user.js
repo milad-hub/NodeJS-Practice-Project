@@ -1,15 +1,20 @@
 const { User } = require('../models/user');
-const { checkAndFilterQuery, isEmptyObject } = require('../services/common');
+const { CommonServices } = require('../services/common');
 const { handleInternalServerError, handlePaginationError } = require('../helpers/errorHandler');
 
 class UserServices {
+
+    constructor() {
+        this._commonServices = new CommonServices();
+    }
+
     async filterUser(req, res) {
         try {
-            if (isEmptyObject(req.query)) {
-                return UserServices.listUsers(req.query, res);
+            if (this._commonServices.isEmptyObject(req.query)) {
+                return UserServices.getUsersList(req.query, res);
             }
 
-            const filteredQuery = checkAndFilterQuery(User.schema, req.query);
+            const filteredQuery = this._commonServices.checkAndFilterQuery(User.schema, req.query);
 
             const selectFields = UserServices.getSelectFields(req.query);
             const sortFields = UserServices.getSortFields(req.query);
@@ -33,7 +38,7 @@ class UserServices {
         }
     }
 
-    static async listUsers(query, res) {
+    static async getUsersList(query, res) {
         try {
             const filterResult = await User.find(query).select('-__v');
             return UserServices.sendResponse(res, filterResult);

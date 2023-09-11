@@ -1,137 +1,139 @@
 const { handleInternalServerError } = require('../helpers/errorHandler');
 
-const isNumeric = (value) => {
-    return !isNaN(value);
-};
+class CommonServices {
 
-const isEmptyObject = (obj) => {
-    return Object.keys(obj).length === 0;
-};
+    isNumeric(value) {
+        return !isNaN(value);
+    };
 
-const checkUserExists = (user) => {
-    if (!user) {
-        throw new Error('User not found!');
-    }
-};
+    isEmptyObject(obj) {
+        return Object.keys(obj).length === 0;
+    };
 
-const checkSchemaMatch = (schema, model, res) => {
-
-    const validKeys = Object.keys(schema.obj);
-
-    for (const key in model) {
-        if (!validKeys.includes(key)) {
-            return handleInternalServerError(res);
+    checkUserExists(user) {
+        if (!user) {
+            throw new Error('User not found!');
         }
+        return true;
+    };
 
-        const value = model[key];
-        const { instance: type, isRequired: required } = schema.paths[key];
+    checkSchemaMatch(schema, model, res) {
 
-        if (required && (value === undefined || value === null)) {
-            return handleInternalServerError(res);
-        }
+        const validKeys = Object.keys(schema.obj);
 
-        switch (type) {
-            case 'String':
-                if (typeof value !== 'string') {
-                    return handleInternalServerError(res);
-                }
-                break;
-            case 'Number':
-                if (typeof value !== 'number' || !isNumeric(value)) {
-                    return handleInternalServerError(res);
-                }
-                break;
-            case 'Boolean':
-                if (typeof value !== 'boolean') {
-                    return handleInternalServerError(res);
-                }
-                break;
-            default:
-                break;
-        }
-    }
+        for (const key in model) {
+            if (!validKeys.includes(key)) {
+                return handleInternalServerError(res);
+            }
 
-    return true;
-};
+            const value = model[key];
+            const { instance: type, isRequired: required } = schema.paths[key];
 
-const checkAndFilterQuery = (schema, query) => {
-    const validKeys = Object.keys(schema.paths);
-    const filteredQuery = {};
+            if (required && (value === undefined || value === null)) {
+                return handleInternalServerError(res);
+            }
 
-    for (const key in query) {
-        if (validKeys.includes(key)) {
-            const value = query[key];
-            const instance = schema.paths[key].instance;
-
-            switch (instance) {
-                case 'Number':
-                    handleNumberInstance(value, filteredQuery, key);
-                    break;
+            switch (type) {
                 case 'String':
+                    if (typeof value !== 'string') {
+                        return handleInternalServerError(res);
+                    }
+                    break;
+                case 'Number':
+                    if (typeof value !== 'number' || !isNumeric(value)) {
+                        return handleInternalServerError(res);
+                    }
+                    break;
                 case 'Boolean':
-                    handleStringOrBooleanInstance(value, filteredQuery, key, instance);
+                    if (typeof value !== 'boolean') {
+                        return handleInternalServerError(res);
+                    }
+                    break;
+                default:
                     break;
             }
         }
-    }
-    return filteredQuery;
-};
 
-//////////////////////////////////////////////////////////////////////////////////
+        return true;
+    };
 
-const handleNumberInstance = (value, filteredQuery, key) => {
-    if (isNumeric(value)) {
-        filteredQuery[key] = parseInt(value);
-    } else if (isOperatorValue(value)) {
-        const [operator, operatorValue] = extractOperatorValue(value);
-        if (isNumeric(operatorValue)) {
-            filteredQuery[key] = { [operator]: parseInt(operatorValue) };
+    checkAndFilterQuery(schema, query) {
+        const validKeys = Object.keys(schema.paths);
+        const filteredQuery = {};
+
+        for (const key in query) {
+            if (validKeys.includes(key)) {
+                const value = query[key];
+                const instance = schema.paths[key].instance;
+
+                switch (instance) {
+                    case 'Number':
+                        handleNumberInstance(value, filteredQuery, key);
+                        break;
+                    case 'String':
+                    case 'Boolean':
+                        handleStringOrBooleanInstance(value, filteredQuery, key, instance);
+                        break;
+                }
+            }
         }
-    }
-};
+        return filteredQuery;
+    };
 
-const handleStringOrBooleanInstance = (value, filteredQuery, key, instance) => {
-    if (instance === 'Boolean') {
-        handleBooleanInstance(value, filteredQuery, key);
-    } else {
-        if (isOperatorValue(value)) {
+    //////////////////////////////////////////////////////////////////////////////////
+
+    static handleNumberInstance(value, filteredQuery, key) {
+        if (isNumeric(value)) {
+            filteredQuery[key] = parseInt(value);
+        } else if (isOperatorValue(value)) {
             const [operator, operatorValue] = extractOperatorValue(value);
-            filteredQuery[key] = { [operator]: operatorValue };
-        } else {
-            filteredQuery[key] = value;
+            if (isNumeric(operatorValue)) {
+                filteredQuery[key] = { [operator]: parseInt(operatorValue) };
+            }
         }
-    }
-};
+    };
 
-const handleBooleanInstance = (value, filteredQuery, key) => {
-    if (isBoolean(value)) {
-        filteredQuery[key] = parseBoolean(value);
-    }
-};
+    static handleStringOrBooleanInstance(value, filteredQuery, key, instance) {
+        if (instance === 'Boolean') {
+            handleBooleanInstance(value, filteredQuery, key);
+        } else {
+            if (isOperatorValue(value)) {
+                const [operator, operatorValue] = extractOperatorValue(value);
+                filteredQuery[key] = { [operator]: operatorValue };
+            } else {
+                filteredQuery[key] = value;
+            }
+        }
+    };
 
-const isOperatorValue = (value) => {
-    return value.startsWith('$');
-};
+    static handleBooleanInstance(value, filteredQuery, key) {
+        if (isBoolean(value)) {
+            filteredQuery[key] = parseBoolean(value);
+        }
+    };
 
-const extractOperatorValue = (value) => {
-    const operatorIndex = value.indexOf(':');
-    const operator = '$' + value.substring(1, operatorIndex);
-    const operatorValue = value.substring(operatorIndex + 1);
-    return [operator, operatorValue];
-};
+    static isOperatorValue(value) {
+        return value.startsWith('$');
+    };
 
-const isBoolean = (value) => {
-    return value === 'true' || value === 'false';
-};
+    static extractOperatorValue(value) {
+        const operatorIndex = value.indexOf(':');
+        const operator = '$' + value.substring(1, operatorIndex);
+        const operatorValue = value.substring(operatorIndex + 1);
+        return [operator, operatorValue];
+    };
 
-const parseBoolean = (value) => {
-    return value === 'true';
-};
+    static isBoolean(value) {
+        return value === 'true' || value === 'false';
+    };
+
+    static parseBoolean(value) {
+        return value === 'true';
+    };
+}
+
+
 
 module.exports = {
-    isEmptyObject,
-    isNumeric,
-    checkUserExists,
-    checkSchemaMatch,
-    checkAndFilterQuery
+    CommonServices
 };

@@ -8,15 +8,15 @@ const userController = new UserController();
 const userAggregationController = new UserAggregationController();
 
 router
-    .get('/active-users', getActiveUsers, userController.listUsers)
-    .get('/oldest-users', getOldestUsers, userController.listUsers);
+    .get('/active-users', getActiveUsers, userController.getUsersList)
+    .get('/oldest-users', getOldestUsers, userController.getUsersList);
 
 router
     .get('/stats', userAggregationController.getUserStats)
     .get('/age/:age', userAggregationController.getFilterUserByAge);
 
 router
-    .get('/', userController.listUsers)
+    .get('/', userController.getUsersList)
     .get('/:id', userController.getUser)
     .post('/', userController.createUser)
     .patch('/:id', userController.updateUser)

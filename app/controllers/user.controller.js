@@ -1,15 +1,16 @@
 const { User, UserStatsAggregateOptions, UserAgeAggregateOptions } = require('../models/user');
 const { UserServices } = require('../services/user');
-const { checkUserExists, checkSchemaMatch } = require('../services/common');
+const { CommonServices } = require('../services/common');
 const { handleInternalServerError } = require('../helpers/errorHandler');
 
 class UserController {
 
     constructor() {
         this._userServices = new UserServices();
+        this._commonServices = new CommonServices();
     }
 
-    listUsers = async (req, res) => {
+    getUsersList = async (req, res) => {
         try {
             await this._userServices.filterUser(req, res);
         } catch (error) {
@@ -20,7 +21,7 @@ class UserController {
     getUser = async (req, res) => {
         try {
             const user = await User.findById(req.params.id);
-            checkUserExists(user);
+            this._commonServices.checkUserExists(user);
 
             res.status(200).json({
                 status: 'success',
@@ -35,7 +36,7 @@ class UserController {
         try {
             const data = Array.isArray(req.body) ? req.body : [req.body];
             for (const obj of data) {
-                if (checkSchemaMatch(User.schema, obj, res)) {
+                if (this._commonServices.checkSchemaMatch(User.schema, obj, res)) {
                     await User.create(obj);
                 }
             }
@@ -57,7 +58,7 @@ class UserController {
                     runValidators: true,
                 }
             );
-            checkUserExists(updatedUser);
+            this._commonServices.checkUserExists(updatedUser);
 
             res.status(200).json({
                 status: 'success',
@@ -71,7 +72,7 @@ class UserController {
     deleteUser = async (req, res) => {
         try {
             const deletedUser = await User.findByIdAndDelete(req.params.id);
-            checkUserExists(deletedUser);
+            this._commonServices.checkUserExists(deletedUser);
 
             res.status(200).json({
                 status: 'success',
