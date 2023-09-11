@@ -8,9 +8,15 @@ class UserController {
     constructor() {
         this._userServices = new UserServices();
         this._commonServices = new CommonServices();
+
+        this.getUsersList = this.getUsersList.bind(this);
+        this.getUser = this.getUser.bind(this);
+        this.createUser = this.createUser.bind(this);
+        this.updateUser = this.updateUser.bind(this);
+        this.deleteUser = this.deleteUser.bind(this);
     }
 
-    getUsersList = async (req, res) => {
+    async getUsersList(req, res) {
         try {
             await this._userServices.filterUser(req, res);
         } catch (error) {
@@ -18,7 +24,7 @@ class UserController {
         }
     };
 
-    getUser = async (req, res) => {
+    async getUser(req, res) {
         try {
             const user = await User.findById(req.params.id);
             this._commonServices.checkUserExists(user);
@@ -32,7 +38,7 @@ class UserController {
         }
     };
 
-    createUser = async (req, res) => {
+    async createUser(req, res) {
         try {
             const data = Array.isArray(req.body) ? req.body : [req.body];
             for (const obj of data) {
@@ -48,7 +54,7 @@ class UserController {
         }
     };
 
-    updateUser = async (req, res) => {
+    async updateUser(req, res) {
         try {
             const updatedUser = await User.findByIdAndUpdate(
                 req.params.id,
@@ -69,7 +75,7 @@ class UserController {
         }
     };
 
-    deleteUser = async (req, res) => {
+    async deleteUser(req, res) {
         try {
             const deletedUser = await User.findByIdAndDelete(req.params.id);
             this._commonServices.checkUserExists(deletedUser);
@@ -85,7 +91,7 @@ class UserController {
 }
 
 class UserAggregationController {
-    getUserStats = async (req, res) => {
+    async getUserStats(req, res) {
         try {
             const result = await User.aggregate(UserStatsAggregateOptions);
             res.status(200).json({
@@ -97,7 +103,7 @@ class UserAggregationController {
         }
     };
 
-    getFilterUserByAge = async (req, res) => {
+    async getFilterUserByAge(req, res) {
         try {
             const age = +req.params.age;
             const result = await User.aggregate(UserAgeAggregateOptions(age));
