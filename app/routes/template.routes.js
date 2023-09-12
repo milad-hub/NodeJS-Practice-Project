@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-const templateController = require('./../controllers/template.controller');
+const webTemplateController = require('../controllers/web-template.controller');
 
 router
-    .get('/', templateController.listUsers)
-    .get('/user-details', templateController.getUserDetails)
-    .get('/jsondb', templateController.getJsonDb)
-    .get('*', templateController.notFound);
+    .get('/', webTemplateController.listUsers)
+    .get('/user-details', webTemplateController.getUserDetails)
+    .get('/jsondb', webTemplateController.getJsonDb)
+    .get('*', webTemplateController.notFound);
 
 module.exports = router;

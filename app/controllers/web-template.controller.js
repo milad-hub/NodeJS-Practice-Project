@@ -4,7 +4,7 @@ const { templates, replaceDefaultRoute, replaceTemplate } = require('../services
 
 const dataObj = JSON.parse(fs.readFileSync(`${__dirname}/../db/db.json`));
 
-const templateController = {
+const webTemplateController = {
 
     listUsers: (req, res) => {
         const homeTableHtml = dataObj.map(el => replaceTemplate(templates.home.table, el)).join('');
@@ -41,4 +41,4 @@ const templateController = {
     }
 };
 
-module.exports = templateController;
+module.exports = webTemplateController;

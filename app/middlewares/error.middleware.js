@@ -1,7 +1,7 @@
 const { AppError } = require('../helpers/error-handler');
 const statusCode = require('../config/status-codes');
 
-const apiError = (req, res, next) => {
+const routeNotFound = (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on the server`, statusCode.notFound));
 };
 
@@ -16,6 +16,6 @@ const globalErrorHandler = (err, req, res, next) => {
 };
 
 module.exports = {
-    apiError,
+    routeNotFound,
     globalErrorHandler
 };

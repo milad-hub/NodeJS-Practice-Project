@@ -1,6 +1,6 @@
 const { User } = require('../models/user');
 const { CommonServices } = require('../services/common');
-const { handleInternalServerError, handlePaginationError } = require('../helpers/error-handler');
+const { handlePaginationError } = require('../helpers/error-handler');
 const { sendResponseWithResults } = require('../helpers/response-handler');
 const statusCode = require('../config/status-codes');
 
@@ -11,7 +11,7 @@ class UserServices {
     }
 
     async filterUser(req, res) {
-        // try {
+
         if (this._commonServices.isEmptyObject(req.query)) {
             return UserServices.getUsersList(req.query, res);
         }
@@ -35,19 +35,12 @@ class UserServices {
             .limit(req.query.limit);
 
         return sendResponseWithResults(res, statusCode.success, result);
-        // } catch (error) {
-        //     return handleInternalServerError(res);
-        // }
     }
 
     static async getUsersList(query, res) {
-        // try {
         const filterResult = await User.find(query).select('-__v');
 
         return sendResponseWithResults(res, statusCode.success, filterResult);
-        // } catch (error) {
-        //     return handleInternalServerError(res);
-        // }
     }
 
     static getSelectFields(query) {
