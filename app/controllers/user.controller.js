@@ -1,7 +1,8 @@
 const { User, UserStatsAggregateOptions, UserAgeAggregateOptions } = require('../models/user');
 const { UserServices } = require('../services/user');
 const { CommonServices } = require('../services/common');
-const { handleInternalServerError } = require('../helpers/errorHandler');
+const { sendResponse, sendSuccessResponse, sendResponseWithResults } = require('../helpers/response-handler');
+const statusCode = require('../config/status-codes');
 
 class UserController {
 
@@ -9,112 +10,79 @@ class UserController {
         this._userServices = new UserServices();
         this._commonServices = new CommonServices();
 
-        this.getUsersList = this.getUsersList.bind(this);
-        this.getUser = this.getUser.bind(this);
-        this.createUser = this.createUser.bind(this);
-        this.updateUser = this.updateUser.bind(this);
-        this.deleteUser = this.deleteUser.bind(this);
+        this.getUsersList = this._commonServices.handleAsyncErrors(this.getUsersList.bind(this));
+        this.getUser = this._commonServices.handleAsyncErrors(this.getUser.bind(this));
+        this.createUser = this._commonServices.handleAsyncErrors(this.createUser.bind(this));
+        this.updateUser = this._commonServices.handleAsyncErrors(this.updateUser.bind(this));
+        this.deleteUser = this._commonServices.handleAsyncErrors(this.deleteUser.bind(this));
     }
 
     async getUsersList(req, res) {
-        try {
-            await this._userServices.filterUser(req, res);
-        } catch (error) {
-            handleInternalServerError(res, error);
-        }
+        await this._userServices.filterUser(req, res);
     };
 
     async getUser(req, res) {
-        try {
-            const user = await User.findById(req.params.id);
-            this._commonServices.checkUserExists(user);
+        const { id } = req.params;
+        const user = await User.findById(id);
+        this._commonServices.checkUserExists(user);
 
-            res.status(200).json({
-                status: 'success',
-                data: user,
-            });
-        } catch (error) {
-            handleInternalServerError(res, error);
-        }
-    };
+        sendResponse(req, statusCode.success, user);
+    }
 
     async createUser(req, res) {
-        try {
-            const data = Array.isArray(req.body) ? req.body : [req.body];
-            for (const obj of data) {
-                if (this._commonServices.checkSchemaMatch(User.schema, obj, res)) {
-                    await User.create(obj);
-                }
+        const data = Array.isArray(req.body) ? req.body : [req.body];
+
+        for (const obj of data) {
+            if (this._commonServices.checkSchemaMatch(User.schema, obj, res)) {
+                await User.create(obj);
             }
-            res.status(201).json({
-                status: 'success',
-            });
-        } catch (error) {
-            handleInternalServerError(res, error);
         }
-    };
+
+        sendSuccessResponse(res, statusCode.created);
+    }
 
     async updateUser(req, res) {
-        try {
-            const updatedUser = await User.findByIdAndUpdate(
-                req.params.id,
-                req.body,
-                {
-                    new: true,
-                    runValidators: true,
-                }
-            );
-            this._commonServices.checkUserExists(updatedUser);
+        const updatedUser = await User.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            {
+                new: true,
+                runValidators: true,
+            }
+        );
+        this._commonServices.checkUserExists(updatedUser);
 
-            res.status(200).json({
-                status: 'success',
-                data: updatedUser,
-            });
-        } catch (error) {
-            handleInternalServerError(res, error);
-        }
+        sendResponse(res, statusCode.success, updatedUser);
     };
 
     async deleteUser(req, res) {
-        try {
-            const deletedUser = await User.findByIdAndDelete(req.params.id);
-            this._commonServices.checkUserExists(deletedUser);
+        const deletedUser = await User.findByIdAndDelete(req.params.id);
+        this._commonServices.checkUserExists(deletedUser);
 
-            res.status(200).json({
-                status: 'success',
-                data: deletedUser,
-            });
-        } catch (error) {
-            handleInternalServerError(res, error);
-        }
+        sendResponse(res, statusCode.success, deletedUser);
     };
 }
 
 class UserAggregationController {
+
+    constructor() {
+        this._commonServices = new CommonServices();
+
+        this.getUserStats = this._commonServices.handleAsyncErrors(this.getUserStats.bind(this));
+        this.getFilterUserByAge = this._commonServices.handleAsyncErrors(this.getFilterUserByAge.bind(this));
+    }
+
     async getUserStats(req, res) {
-        try {
-            const result = await User.aggregate(UserStatsAggregateOptions);
-            res.status(200).json({
-                status: 'success',
-                data: result,
-            });
-        } catch (error) {
-            handleInternalServerError(res, error);
-        }
+        const result = await User.aggregate(UserStatsAggregateOptions);
+
+        sendResponse(res, statusCode.success, result);
     };
 
     async getFilterUserByAge(req, res) {
-        try {
-            const age = +req.params.age;
-            const result = await User.aggregate(UserAgeAggregateOptions(age));
-            res.status(200).json({
-                status: 'success',
-                results: result.length,
-                data: result,
-            });
-        } catch (error) {
-            handleInternalServerError(res, error);
-        }
+        const age = +req.params.age;
+        const result = await User.aggregate(UserAgeAggregateOptions(age));
+
+        sendResponseWithResults(res, statusCode.success, result);
     };
 }
 

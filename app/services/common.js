@@ -1,4 +1,4 @@
-const { handleInternalServerError } = require('../helpers/errorHandler');
+const { handleInternalServerError } = require('../helpers/error-handler');
 
 class CommonServices {
 
@@ -14,7 +14,6 @@ class CommonServices {
         if (!user) {
             throw new Error('User not found!');
         }
-        return true;
     };
 
     checkSchemaMatch(schema, model, res) {
@@ -79,6 +78,12 @@ class CommonServices {
         }
         return filteredQuery;
     };
+
+    handleAsyncErrors(fn) {
+        return (req, res, next) => {
+            fn(req, res, next).catch(next);
+        };
+    }
 
     //////////////////////////////////////////////////////////////////////////////////
 

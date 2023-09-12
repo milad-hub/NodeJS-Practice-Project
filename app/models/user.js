@@ -75,6 +75,7 @@ const UserStatsAggregateOptions = [
     },
     {
         $project: {
+            _id: 0,
             totalUsers: 1,
             totalActiveUsers: 1,
             maxAge: 1,
