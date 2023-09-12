@@ -34,13 +34,13 @@ class UserServices {
             .skip(skipValue)
             .limit(req.query.limit);
 
-        return sendResponseWithResults(res, statusCode.success, result);
+        return sendResponseWithResults(res, statusCode.ok, result);
     }
 
     static async getUsersList(query, res) {
         const filterResult = await User.find(query).select('-__v');
 
-        return sendResponseWithResults(res, statusCode.success, filterResult);
+        return sendResponseWithResults(res, statusCode.ok, filterResult);
     }
 
     static getSelectFields(query) {

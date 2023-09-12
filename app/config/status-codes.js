@@ -5,7 +5,7 @@ const statusCodes = {
     processing: 102,
 
     // Success
-    success: 200,
+    ok: 200,
     created: 201,
     accepted: 202,
     nonAuthoritativeInformation: 203,

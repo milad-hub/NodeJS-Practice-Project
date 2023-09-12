@@ -26,7 +26,7 @@ class UserController {
         const user = await User.findById(id);
         this._commonServices.checkUserExists(user);
 
-        sendResponse(req, statusCode.success, user);
+        sendResponse(req, statusCode.ok, user);
     }
 
     async createUser(req, res) {
@@ -52,14 +52,14 @@ class UserController {
         );
         this._commonServices.checkUserExists(updatedUser);
 
-        sendResponse(res, statusCode.success, updatedUser);
+        sendResponse(res, statusCode.ok, updatedUser);
     };
 
     async deleteUser(req, res) {
         const deletedUser = await User.findByIdAndDelete(req.params.id);
         this._commonServices.checkUserExists(deletedUser);
 
-        sendResponse(res, statusCode.success, deletedUser);
+        sendResponse(res, statusCode.ok, deletedUser);
     };
 }
 
@@ -75,14 +75,14 @@ class UserAggregationController {
     async getUserStats(req, res) {
         const result = await User.aggregate(UserStatsAggregateOptions);
 
-        sendResponse(res, statusCode.success, result);
+        sendResponse(res, statusCode.ok, result);
     };
 
     async getFilterUserByAge(req, res) {
         const age = +req.params.age;
         const result = await User.aggregate(UserAgeAggregateOptions(age));
 
-        sendResponseWithResults(res, statusCode.success, result);
+        sendResponseWithResults(res, statusCode.ok, result);
     };
 }
 
