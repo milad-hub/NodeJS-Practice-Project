@@ -33,7 +33,7 @@ class CommonServices {
                     }
                     break;
                 case 'Number':
-                    if (typeof value !== 'number' || !isNumeric(value)) {
+                    if (typeof value !== 'number' || !this.isNumeric(value)) {
                         return handleInternalServerError(next);
                     }
                     break;
