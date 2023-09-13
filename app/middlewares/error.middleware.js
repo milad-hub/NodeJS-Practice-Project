@@ -1,4 +1,5 @@
 const { AppError } = require('../helpers/error-handler');
+const { sendResponse } = require('../helpers/response-handler');
 const statusCode = require('../config/status-codes');
 
 const routeNotFound = (req, res, next) => {
@@ -6,15 +7,11 @@ const routeNotFound = (req, res, next) => {
 };
 
 const globalErrorHandler = (err, req, res, next) => {
-    err.statusCode = res.statusCode || statusCode.internalServerError;
+    err.statusCode = err.statusCode || statusCode.internalServerError;
 
-    res.status(err.statusCode).json({
-        data: "",
-        results: "",
-        message: err.message,
-        messages: [err.messages],
-    });
+    sendResponse(res, err.statusCode, "", err.message, err.messages);
 };
+
 
 module.exports = {
     routeNotFound,

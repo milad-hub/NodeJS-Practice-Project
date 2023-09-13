@@ -1,22 +1,12 @@
-const sendResponse = (res, statusCode, data) => {
+const sendResponse = (res, statusCode, data = "", message = "", messages = "") => {
     res.status(statusCode).json({
+        results: data.length,
         data: data,
-        results: data.lenght,
-        message: "",
-        messages: []
-    });
-};
-
-const sendSuccessResponse = (res, statusCode) => {
-    res.status(statusCode).json({
-        data: "",
-        results: 0,
-        message: "",
-        messages: []
+        message: message,
+        messages: messages
     });
 };
 
 module.exports = {
-    sendResponse,
-    sendSuccessResponse
+    sendResponse
 };

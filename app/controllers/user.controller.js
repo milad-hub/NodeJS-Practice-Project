@@ -1,7 +1,8 @@
 const { User, UserStatsAggregateOptions, UserAgeAggregateOptions } = require('../models/user');
 const { UserServices } = require('../services/user');
 const { CommonServices } = require('../services/common');
-const { sendResponse, sendSuccessResponse } = require('../helpers/response-handler');
+const { sendResponse } = require('../helpers/response-handler');
+const { handleUserNotExistsError } = require('../helpers/error-handler');
 const statusCode = require('../config/status-codes');
 
 class UserController {
@@ -17,33 +18,33 @@ class UserController {
         this.deleteUser = this._commonServices.handleAsyncErrors(this.deleteUser.bind(this));
     }
 
-    async getUsersList(req, res) {
-        await this._userServices.filterUser(req, res);
+    async getUsersList(req, res, next) {
+        await this._userServices.filterUser(req, res, next);
     };
 
-    async getUser(req, res) {
+    async getUser(req, res, next) {
         const { id } = req.params;
         const user = await User.findById(id);
 
-        this._commonServices.handleUserNotExists(user);
+        handleUserNotExistsError(user, next);
 
         sendResponse(res, statusCode.ok, user);
     }
 
-    async createUser(req, res) {
-        const data = Array.isArray(req.body) ? req.body : [req.body];
+    async createUser(req, res, next) {
+        const data = Array.isArray(req.body) ? [...req.body] : [req.body];
 
-        const validData = data.filter((obj) => this._commonServices.checkSchemaMatch(User.schema, obj, res));
+        const validData = data.filter((obj) => this._commonServices.checkSchemaMatch(User.schema, obj, next));
 
         if (validData.length > 0) {
             await User.insertMany(validData);
         }
 
-        sendSuccessResponse(res, statusCode.created);
+        sendResponse(res, statusCode.created);
     }
 
 
-    async updateUser(req, res) {
+    async updateUser(req, res, next) {
         const updatedUser = await User.findByIdAndUpdate(
             req.params.id,
             req.body,
@@ -52,14 +53,14 @@ class UserController {
                 runValidators: true,
             }
         );
-        this._commonServices.handleUserNotExists(updatedUser);
+        handleUserNotExistsError(updatedUser, next);
 
         sendResponse(res, statusCode.ok, updatedUser);
     };
 
-    async deleteUser(req, res) {
+    async deleteUser(req, res, next) {
         const deletedUser = await User.findByIdAndDelete(req.params.id);
-        this._commonServices.handleUserNotExists(deletedUser);
+        handleUserNotExistsError(deletedUser, next);
 
         sendResponse(res, statusCode.ok, deletedUser);
     };

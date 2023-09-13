@@ -10,7 +10,7 @@ class UserServices {
         this._commonServices = new CommonServices();
     }
 
-    async filterUser(req, res) {
+    async filterUser(req, res, next) {
 
         if (this._commonServices.isEmptyObject(req.query)) {
             return UserServices.getUsersList(req.query, res);
@@ -25,7 +25,7 @@ class UserServices {
         const totalRecords = await User.countDocuments(filteredQuery);
 
         if (skipValue >= totalRecords) {
-            return handlePaginationError(res);
+            return handlePaginationError(next);
         }
 
         const result = await User.find(filteredQuery)
@@ -38,13 +38,13 @@ class UserServices {
     }
 
     static async getUsersList(query, res) {
-        const filterResult = await User.find(query).select('-__v');
+        const filterResult = await User.find(query).select('-_id -__v');
 
         return sendResponse(res, statusCode.ok, filterResult);
     }
 
     static getSelectFields(query) {
-        return query.fields ? query.fields.split(',').join(' ') : '-__v';
+        return query.fields ? query.fields.split(',').join(' ') : '-_id -__v';
     }
 
     static getSortFields(query) {

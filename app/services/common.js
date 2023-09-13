@@ -1,5 +1,4 @@
 const { handleInternalServerError } = require('../helpers/error-handler');
-const statusCode = require('../config/status-codes');
 
 class CommonServices {
 
@@ -11,42 +10,36 @@ class CommonServices {
         return Object.keys(obj).length === 0;
     };
 
-    handleUserNotExists(user) {
-        if (!user) {
-            return next(new AppError('User not found', statusCode.notFound));
-        }
-    };
-
-    checkSchemaMatch(schema, model, res) {
+    checkSchemaMatch(schema, model, next) {
 
         const validKeys = Object.keys(schema.obj);
 
         for (const key in model) {
             if (!validKeys.includes(key)) {
-                return handleInternalServerError(res);
+                return handleInternalServerError(next);
             }
 
             const value = model[key];
             const { instance: type, isRequired: required } = schema.paths[key];
 
             if (required && (value === undefined || value === null)) {
-                return handleInternalServerError(res);
+                return handleInternalServerError(next);
             }
 
             switch (type) {
                 case 'String':
                     if (typeof value !== 'string') {
-                        return handleInternalServerError(res);
+                        return handleInternalServerError(next);
                     }
                     break;
                 case 'Number':
                     if (typeof value !== 'number' || !isNumeric(value)) {
-                        return handleInternalServerError(res);
+                        return handleInternalServerError(next);
                     }
                     break;
                 case 'Boolean':
                     if (typeof value !== 'boolean') {
-                        return handleInternalServerError(res);
+                        return handleInternalServerError(next);
                     }
                     break;
                 default:
@@ -68,11 +61,11 @@ class CommonServices {
 
                 switch (instance) {
                     case 'Number':
-                        handleNumberInstance(value, filteredQuery, key);
+                        CommonServices.handleNumberInstance(value, filteredQuery, key);
                         break;
                     case 'String':
                     case 'Boolean':
-                        handleStringOrBooleanInstance(value, filteredQuery, key, instance);
+                        CommonServices.handleStringOrBooleanInstance(value, filteredQuery, key, instance);
                         break;
                 }
             }
@@ -89,11 +82,11 @@ class CommonServices {
     //////////////////////////////////////////////////////////////////////////////////
 
     static handleNumberInstance(value, filteredQuery, key) {
-        if (isNumeric(value)) {
+        if (CommonServices.isNumeric(value)) {
             filteredQuery[key] = parseInt(value);
-        } else if (isOperatorValue(value)) {
-            const [operator, operatorValue] = extractOperatorValue(value);
-            if (isNumeric(operatorValue)) {
+        } else if (CommonServices.isOperatorValue(value)) {
+            const [operator, operatorValue] = CommonServices.extractOperatorValue(value);
+            if (CommonServices.isNumeric(operatorValue)) {
                 filteredQuery[key] = { [operator]: parseInt(operatorValue) };
             }
         }
@@ -101,10 +94,10 @@ class CommonServices {
 
     static handleStringOrBooleanInstance(value, filteredQuery, key, instance) {
         if (instance === 'Boolean') {
-            handleBooleanInstance(value, filteredQuery, key);
+            CommonServices.handleBooleanInstance(value, filteredQuery, key);
         } else {
-            if (isOperatorValue(value)) {
-                const [operator, operatorValue] = extractOperatorValue(value);
+            if (CommonServices.isOperatorValue(value)) {
+                const [operator, operatorValue] = CommonServices.extractOperatorValue(value);
                 filteredQuery[key] = { [operator]: operatorValue };
             } else {
                 filteredQuery[key] = value;
@@ -113,8 +106,8 @@ class CommonServices {
     };
 
     static handleBooleanInstance(value, filteredQuery, key) {
-        if (isBoolean(value)) {
-            filteredQuery[key] = parseBoolean(value);
+        if (CommonServices.isBoolean(value)) {
+            filteredQuery[key] = CommonServices.parseBoolean(value);
         }
     };
 

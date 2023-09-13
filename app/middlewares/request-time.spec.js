@@ -6,7 +6,7 @@ const addRequestTime = (req, res, next) => {
         const endTime = Date.now();
         return endTime - startTime;
     };
-    req.requestTime = new Date().toISOString();
+    req.requestTime = new Date().toString();
 
     console.log('=====================================================================');
     console.log(`Request URL => ${req.protocol}://${req.get('host')}${req.originalUrl}`);

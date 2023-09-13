@@ -1,5 +1,6 @@
 const fs = require('fs');
 const url = require('url');
+const statusCode = require('../config/status-codes');
 const { templates, replaceDefaultRoute, replaceTemplate } = require('../services/template');
 
 const dataObj = JSON.parse(fs.readFileSync(`${__dirname}/../db/db.json`));
@@ -14,7 +15,7 @@ const webTemplateController = {
 
         const updatedIndex = replaceDefaultRoute(templates.index, tempDefaultRoute);
 
-        res.status(200).end(updatedIndex);
+        res.status(statusCode.ok).end(updatedIndex);
     },
 
     getUserDetails: (req, res) => {
@@ -25,19 +26,19 @@ const webTemplateController = {
 
             const updatedIndex = replaceDefaultRoute(templates.index, tempDefaultRoute);
 
-            res.status(200).end(updatedIndex);
+            res.status(statusCode.ok).end(updatedIndex);
         } catch {
-            res.status(404).end('<h3>Invalid ID</h3>');
+            res.status(statusCode.notFound).end('<h3>Invalid ID</h3>');
         }
     },
 
     getJsonDb: (req, res) => {
-        res.status(200).json(dataObj);
+        res.status(statusCode.ok).json(dataObj);
     },
 
     notFound: (req, res) => {
         const updatedIndex = replaceDefaultRoute(templates.index, templates.notFound);
-        res.status(404).end(updatedIndex);
+        res.status(statusCode.notFound).end(updatedIndex);
     }
 };
 

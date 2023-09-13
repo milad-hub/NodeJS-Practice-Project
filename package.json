@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "app:dev": "nodemon server.js",
-    "app:prod": "set NODE_ENV=production && nodemon server.js",
-    "debug": "ndb server.js"
+    "app:prod": "set NODE_ENV=production && node server.js",
+    "app:debug": "ndb server.js"
   },
   "author": "",
   "license": "ISC",

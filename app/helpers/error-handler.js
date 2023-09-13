@@ -4,44 +4,33 @@ class AppError extends Error {
     constructor(message, statusCode) {
         super(message);
         this.statusCode = statusCode;
-        this.status = `${statusCode}`.startsWith('4') ? 'fail' : 'error';
-        this.isOperational = true;
 
         Error.captureStackTrace(this, this.constructor);
     }
 }
 
-const handleBadRequestError = (res) => {
-    res.status(statusCode.badRequest).json({
-        data: "",
-        results: "",
-        message: "",
-        messages: []
-    });
+const handleBadRequestError = (next) => {
+    return next(new AppError('Bad request', statusCode.badRequest));
 };
 
-const handlePaginationError = (res) => {
-    res.status(statusCode.badRequest).json({
-        data: "",
-        results: "",
-        message: "Page not found",
-        messages: []
-    });
+const handlePaginationError = (next) => {
+    return next(new AppError('Page not found', statusCode.notFound));
 };
 
-const handleInternalServerError = (res, err = null) => {
-    const message = err?.message ?? "Internal server error";
-    res.status(statusCode.internalServerError).json({
-        data: "",
-        results: "",
-        message: message,
-        messages: []
-    });
+const handleUserNotExistsError = (user, next) => {
+    if (!user) {
+        return next(new AppError('User not found', statusCode.notFound));
+    }
+};
+
+const handleInternalServerError = (next) => {
+    return next(new AppError('Internal server error', statusCode.internalServerError));
 };
 
 module.exports = {
     AppError,
     handleBadRequestError,
     handlePaginationError,
+    handleUserNotExistsError,
     handleInternalServerError
 };
