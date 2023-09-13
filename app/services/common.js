@@ -73,12 +73,6 @@ class CommonServices {
         return filteredQuery;
     };
 
-    handleAsyncErrors(fn) {
-        return (req, res, next) => {
-            fn(req, res, next).catch(next);
-        };
-    }
-
     //////////////////////////////////////////////////////////////////////////////////
 
     static handleNumberInstance(value, filteredQuery, key) {

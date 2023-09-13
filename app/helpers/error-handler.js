@@ -9,6 +9,10 @@ class AppError extends Error {
     }
 }
 
+const handleInternalServerError = (next) => {
+    return next(new AppError('Internal server error', statusCode.internalServerError));
+};
+
 const handleBadRequestError = (next) => {
     return next(new AppError('Bad request', statusCode.badRequest));
 };
@@ -23,12 +27,16 @@ const handleUserNotExistsError = (user, next) => {
     }
 };
 
-const handleInternalServerError = (next) => {
-    return next(new AppError('Internal server error', statusCode.internalServerError));
+const handleAsyncErrors = (fn) => {
+    return (req, res, next) => {
+        fn(req, res, next).catch(next);
+    };
 };
+
 
 module.exports = {
     AppError,
+    handleAsyncErrors,
     handleBadRequestError,
     handlePaginationError,
     handleUserNotExistsError,

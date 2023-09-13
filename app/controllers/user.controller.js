@@ -2,7 +2,7 @@ const { User, UserStatsAggregateOptions, UserAgeAggregateOptions } = require('..
 const { UserServices } = require('../services/user');
 const { CommonServices } = require('../services/common');
 const { sendResponse } = require('../helpers/response-handler');
-const { handleUserNotExistsError } = require('../helpers/error-handler');
+const { handleAsyncErrors, handleUserNotExistsError } = require('../helpers/error-handler');
 const statusCode = require('../config/status-codes');
 
 class UserController {
@@ -11,11 +11,11 @@ class UserController {
         this._userServices = new UserServices();
         this._commonServices = new CommonServices();
 
-        this.getUsersList = this._commonServices.handleAsyncErrors(this.getUsersList.bind(this));
-        this.getUser = this._commonServices.handleAsyncErrors(this.getUser.bind(this));
-        this.createUser = this._commonServices.handleAsyncErrors(this.createUser.bind(this));
-        this.updateUser = this._commonServices.handleAsyncErrors(this.updateUser.bind(this));
-        this.deleteUser = this._commonServices.handleAsyncErrors(this.deleteUser.bind(this));
+        this.getUsersList = handleAsyncErrors(this.getUsersList.bind(this));
+        this.getUser = handleAsyncErrors(this.getUser.bind(this));
+        this.createUser = handleAsyncErrors(this.createUser.bind(this));
+        this.updateUser = handleAsyncErrors(this.updateUser.bind(this));
+        this.deleteUser = handleAsyncErrors(this.deleteUser.bind(this));
     }
 
     async getUsersList(req, res, next) {
@@ -24,7 +24,7 @@ class UserController {
 
     async getUser(req, res, next) {
         const { id } = req.params;
-        const user = await User.findById(id);
+        const user = await User.findById(id).select('-_id -__v');
 
         handleUserNotExistsError(user, next);
 
@@ -71,8 +71,8 @@ class UserAggregationController {
     constructor() {
         this._commonServices = new CommonServices();
 
-        this.getUserStats = this._commonServices.handleAsyncErrors(this.getUserStats.bind(this));
-        this.getFilterUserByAge = this._commonServices.handleAsyncErrors(this.getFilterUserByAge.bind(this));
+        this.getUserStats = handleAsyncErrors(this.getUserStats.bind(this));
+        this.getFilterUserByAge = handleAsyncErrors(this.getFilterUserByAge.bind(this));
     }
 
     async getUserStats(req, res) {
