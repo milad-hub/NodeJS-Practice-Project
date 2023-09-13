@@ -1,7 +1,7 @@
 const { User, UserStatsAggregateOptions, UserAgeAggregateOptions } = require('../models/user');
 const { UserServices } = require('../services/user');
 const { CommonServices } = require('../services/common');
-const { sendResponse, sendSuccessResponse, sendResponseWithResults } = require('../helpers/response-handler');
+const { sendResponse, sendSuccessResponse } = require('../helpers/response-handler');
 const statusCode = require('../config/status-codes');
 
 class UserController {
@@ -24,22 +24,24 @@ class UserController {
     async getUser(req, res) {
         const { id } = req.params;
         const user = await User.findById(id);
-        this._commonServices.checkUserExists(user);
 
-        sendResponse(req, statusCode.ok, user);
+        this._commonServices.handleUserNotExists(user);
+
+        sendResponse(res, statusCode.ok, user);
     }
 
     async createUser(req, res) {
         const data = Array.isArray(req.body) ? req.body : [req.body];
 
-        for (const obj of data) {
-            if (this._commonServices.checkSchemaMatch(User.schema, obj, res)) {
-                await User.create(obj);
-            }
+        const validData = data.filter((obj) => this._commonServices.checkSchemaMatch(User.schema, obj, res));
+
+        if (validData.length > 0) {
+            await User.insertMany(validData);
         }
 
         sendSuccessResponse(res, statusCode.created);
     }
+
 
     async updateUser(req, res) {
         const updatedUser = await User.findByIdAndUpdate(
@@ -50,14 +52,14 @@ class UserController {
                 runValidators: true,
             }
         );
-        this._commonServices.checkUserExists(updatedUser);
+        this._commonServices.handleUserNotExists(updatedUser);
 
         sendResponse(res, statusCode.ok, updatedUser);
     };
 
     async deleteUser(req, res) {
         const deletedUser = await User.findByIdAndDelete(req.params.id);
-        this._commonServices.checkUserExists(deletedUser);
+        this._commonServices.handleUserNotExists(deletedUser);
 
         sendResponse(res, statusCode.ok, deletedUser);
     };
@@ -82,7 +84,7 @@ class UserAggregationController {
         const age = +req.params.age;
         const result = await User.aggregate(UserAgeAggregateOptions(age));
 
-        sendResponseWithResults(res, statusCode.ok, result);
+        sendResponse(res, statusCode.ok, result);
     };
 }
 

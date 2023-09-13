@@ -1,7 +1,7 @@
 const { User } = require('../models/user');
 const { CommonServices } = require('../services/common');
 const { handlePaginationError } = require('../helpers/error-handler');
-const { sendResponseWithResults } = require('../helpers/response-handler');
+const { sendResponse } = require('../helpers/response-handler');
 const statusCode = require('../config/status-codes');
 
 class UserServices {
@@ -34,13 +34,13 @@ class UserServices {
             .skip(skipValue)
             .limit(req.query.limit);
 
-        return sendResponseWithResults(res, statusCode.ok, result);
+        return sendResponse(res, statusCode.ok, result);
     }
 
     static async getUsersList(query, res) {
         const filterResult = await User.find(query).select('-__v');
 
-        return sendResponseWithResults(res, statusCode.ok, filterResult);
+        return sendResponse(res, statusCode.ok, filterResult);
     }
 
     static getSelectFields(query) {

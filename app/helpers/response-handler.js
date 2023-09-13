@@ -1,26 +1,22 @@
-const sendResponseWithResults = (res, statusCode, data) => {
-    res.status(statusCode).json({
-        status: 'success',
-        results: data.length,
-        data: data
-    });
-};
-
 const sendResponse = (res, statusCode, data) => {
     res.status(statusCode).json({
-        status: 'success',
-        data: data
+        data: data,
+        results: data.lenght,
+        message: "",
+        messages: []
     });
 };
 
 const sendSuccessResponse = (res, statusCode) => {
     res.status(statusCode).json({
-        status: 'success'
+        data: "",
+        results: 0,
+        message: "",
+        messages: []
     });
 };
 
 module.exports = {
-    sendResponseWithResults,
     sendResponse,
     sendSuccessResponse
 };

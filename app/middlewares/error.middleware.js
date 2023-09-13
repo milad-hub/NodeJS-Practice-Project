@@ -7,11 +7,12 @@ const routeNotFound = (req, res, next) => {
 
 const globalErrorHandler = (err, req, res, next) => {
     err.statusCode = res.statusCode || statusCode.internalServerError;
-    err.status = err.status || 'error';
 
     res.status(err.statusCode).json({
-        status: err.status,
-        message: err.message
+        data: "",
+        results: "",
+        message: err.message,
+        messages: [err.messages],
     });
 };
 

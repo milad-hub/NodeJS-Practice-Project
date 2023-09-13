@@ -13,23 +13,29 @@ class AppError extends Error {
 
 const handleBadRequestError = (res) => {
     res.status(statusCode.badRequest).json({
-        status: "fail",
-        message: "Bad request"
+        data: "",
+        results: "",
+        message: "",
+        messages: []
     });
 };
 
 const handlePaginationError = (res) => {
     res.status(statusCode.badRequest).json({
-        status: "fail",
-        message: "Page not found"
+        data: "",
+        results: "",
+        message: "Page not found",
+        messages: []
     });
 };
 
 const handleInternalServerError = (res, err = null) => {
     const message = err?.message ?? "Internal server error";
     res.status(statusCode.internalServerError).json({
-        status: "fail",
-        message: message
+        data: "",
+        results: "",
+        message: message,
+        messages: []
     });
 };
 

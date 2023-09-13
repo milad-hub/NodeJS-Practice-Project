@@ -1,4 +1,5 @@
 const { handleInternalServerError } = require('../helpers/error-handler');
+const statusCode = require('../config/status-codes');
 
 class CommonServices {
 
@@ -10,9 +11,9 @@ class CommonServices {
         return Object.keys(obj).length === 0;
     };
 
-    checkUserExists(user) {
+    handleUserNotExists(user) {
         if (!user) {
-            throw new Error('User not found!');
+            return next(new AppError('User not found', statusCode.notFound));
         }
     };
 
