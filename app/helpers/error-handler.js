@@ -9,6 +9,41 @@ class AppError extends Error {
     }
 }
 
+const handleDbErrors = (err, req, res, next) => {
+
+    handleDbCastErrors(err, next);
+
+    handleDbValidationErrors(err, next);
+
+    handleDbDuplicateFieldError(err, next);
+
+    process.env.NODE_ENV === 'development' ? next(err) : next(new AppError('Something went wrong', statusCode.internalServerError));
+};
+
+const handleDbCastErrors = (err, next) => {
+    if (err.name === 'CastError') {
+        return next(new AppError(`Invalid ${err.path}:  ${err.value}`, statusCode.notFound));
+    }
+};
+
+const handleDbValidationErrors = (err, next) => {
+    if (err.name === 'ValidationError') {
+        const fields = Object.values(err.errors).map(el => el.message);
+
+        return next(new AppError(`Invalid input data: ${fields.join(', ')}`, statusCode.badRequest));
+    }
+};
+
+const handleDbDuplicateFieldError = (err, next) => {
+    if (err.code === 11000) {
+        const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0].replace(/["']/g, '');
+
+        return next(new AppError(`Duplicate field value entered: ${value}`, statusCode.badRequest));
+    }
+};
+
+////////////////////////////////////////////////////////////////////////////////////////
+
 const handleInternalServerError = (next) => {
     return next(new AppError('Internal server error', statusCode.internalServerError));
 };
@@ -37,6 +72,7 @@ const handleAsyncErrors = (fn) => {
 module.exports = {
     AppError,
     handleAsyncErrors,
+    handleDbErrors,
     handleBadRequestError,
     handlePaginationError,
     handleUserNotExistsError,
