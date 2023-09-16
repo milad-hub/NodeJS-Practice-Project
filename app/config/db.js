@@ -1,6 +1,5 @@
 require('dotenv').config({ path: './config.env' });
 const mongoose = require('mongoose');
-const { handleDbCastErrors } = require('../helpers/error-handler');
 
 module.exports = async () => {
     try {
