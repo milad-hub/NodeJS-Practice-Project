@@ -98,8 +98,8 @@
 <body>
     <div class="container">
         <div class="toggle-btn">
-            <div class="btn active" onclick="showLogin()">Login</div>
-            <div class="btn" onclick="showRegister()">Register</div>
+            <div class="btn active" onclick="toggleFormDisplay('login')">Login</div>
+            <div class="btn" onclick="toggleFormDisplay('register')">Register</div>
         </div>
         <div class="login-form">
             <form>
@@ -132,18 +132,20 @@
     </div>
 
     <script>
-        function showLogin() {
-            document.querySelector('.login-form').style.display = "block";
-            document.querySelector('.register-form').style.display = "none";
-            document.querySelector('.btn.active').classList.remove('active');
-            document.querySelector('.btn:nth-child(1)').classList.add('active');
-        }
+        function toggleFormDisplay(formToShow) {
+            const loginForm = document.querySelector('.login-form');
+            const registerForm = document.querySelector('.register-form');
+            const activeButton = document.querySelector('.btn.active');
 
-        function showRegister() {
-            document.querySelector('.login-form').style.display = "none";
-            document.querySelector('.register-form').style.display = "block";
-            document.querySelector('.btn.active').classList.remove('active');
-            document.querySelector('.btn:nth-child(2)').classList.add('active');
+            const forms = {
+                'login': { show: loginForm, hide: registerForm, btnIndex: 1 },
+                'register': { show: registerForm, hide: loginForm, btnIndex: 2 }
+            };
+
+            activeButton.classList.remove('active');
+            forms[formToShow].show.style.display = "block";
+            forms[formToShow].hide.style.display = "none";
+            document.querySelector(`.btn:nth-child(${forms[formToShow].btnIndex})`).classList.add('active');
         }
     </script>
 </body>
