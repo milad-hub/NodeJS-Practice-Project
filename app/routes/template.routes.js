@@ -4,11 +4,11 @@ const router = express.Router();
 const webTemplateController = require('../controllers/web-template.controller');
 
 router
-    .get('/', webTemplateController.home)
+    .get('/', webTemplateController.redirectToHomePage)
     .get('/login', webTemplateController.loginPage)
-    .get('/list', webTemplateController.listUsers)
-    .get('/list/user-details', webTemplateController.getUserDetails)
+    .get('/list', webTemplateController.listOfUsersPage)
+    .get('/list/user-details', webTemplateController.getUserDetailsPage)
     .get('/jsondb', webTemplateController.getJsonDb)
-    .get('*', webTemplateController.notFound);
+    .get('*', webTemplateController.notFoundPage);
 
 module.exports = router;

@@ -7,28 +7,28 @@ const dataObj = JSON.parse(fs.readFileSync(`${__dirname}/../db/db.json`));
 
 const webTemplateController = {
 
-    listUsers: (req, res) => {
-        const homeTableHtml = dataObj.map(el => replaceTemplate(templates.home.table, el)).join('');
-        const tempDefaultRoute = templates.home.index
+    listOfUsersPage: (req, res) => {
+        const userTableHtml = dataObj.map(el => replaceTemplate(templates.home.table, el)).join('');
+        const userDetailsRoute = templates.home.index
             .replace(/{%USER_DETAILS%}/g, templates.home.userDetails)
-            .replace(/{%HOME_TABLE%}/g, homeTableHtml);
+            .replace(/{%HOME_TABLE%}/g, userTableHtml);
 
-        const updatedIndex = replaceDefaultRoute(templates.index.replace(/{%TITLE%}/g, 'List of Users'), tempDefaultRoute);
+        const updatedIndex = replaceDefaultRoute(templates.index.replace(/{%TITLE%}/g, 'List of Users'), userDetailsRoute);
 
         res.status(statusCode.ok).end(updatedIndex);
     },
 
-    getUserDetails: (req, res) => {
+    getUserDetailsPage: (req, res) => {
         const { query } = url.parse(req.url, true);
         try {
             const userDetailsObj = dataObj[query.id - 1];
-            const tempDefaultRoute = replaceTemplate(templates.userDetails, userDetailsObj);
+            const userDetailsRoute = replaceTemplate(templates.userDetails, userDetailsObj);
 
-            const updatedIndex = replaceDefaultRoute(templates.index.replace(/{%TITLE%}/g, 'User Details'), tempDefaultRoute);
+            const updatedIndex = replaceDefaultRoute(templates.index.replace(/{%TITLE%}/g, 'User Details'), userDetailsRoute);
 
             res.status(statusCode.ok).end(updatedIndex);
         } catch {
-            res.status(statusCode.notFound).end('<h3>Invalid ID</h3>');
+            res.status(statusCode.notFound).end('<h3>User not found!</h3>');
         }
     },
 
@@ -37,7 +37,7 @@ const webTemplateController = {
         res.status(statusCode.ok).end(updatedIndex);
     },
 
-    home: (req, res) => {
+    redirectToHomePage: (req, res) => {
         res.redirect('/web/list');
     },
 
@@ -45,7 +45,7 @@ const webTemplateController = {
         res.status(statusCode.ok).json(dataObj);
     },
 
-    notFound: (req, res) => {
+    notFoundPage: (req, res) => {
         const updatedIndex = replaceDefaultRoute(templates.index.replace(/{%TITLE%}/g, '404 Not Found'), templates.notFound);
         res.status(statusCode.notFound).end(updatedIndex);
     }
