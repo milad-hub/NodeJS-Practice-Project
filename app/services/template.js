@@ -9,6 +9,7 @@ const templates = {
         userDetails: fs.readFileSync(`${__dirname}/../views/home/user-details.html`, 'utf-8'),
     },
     userDetails: fs.readFileSync(`${__dirname}/../views/user-details/index.html`, 'utf-8'),
+    loginAndRegister: fs.readFileSync(`${__dirname}/../views/login-register/index.html`, 'utf-8')
 };
 
 const replaceTemplate = (tempHtml, element) => {

@@ -12,6 +12,11 @@ module.exports = (app) => {
     }
 
     app
+        .get('/', (req, res) => {
+            res.redirect('/web');
+        });
+
+    app
         .use('/web', webTemplate)
         .use('/api/user', user);
 

@@ -13,7 +13,7 @@ const webTemplateController = {
             .replace(/{%USER_DETAILS%}/g, templates.home.userDetails)
             .replace(/{%HOME_TABLE%}/g, homeTableHtml);
 
-        const updatedIndex = replaceDefaultRoute(templates.index, tempDefaultRoute);
+        const updatedIndex = replaceDefaultRoute(templates.index.replace(/{%TITLE%}/g, 'List of Users'), tempDefaultRoute);
 
         res.status(statusCode.ok).end(updatedIndex);
     },
@@ -24,7 +24,7 @@ const webTemplateController = {
             const userDetailsObj = dataObj[query.id - 1];
             const tempDefaultRoute = replaceTemplate(templates.userDetails, userDetailsObj);
 
-            const updatedIndex = replaceDefaultRoute(templates.index, tempDefaultRoute);
+            const updatedIndex = replaceDefaultRoute(templates.index.replace(/{%TITLE%}/g, 'User Details'), tempDefaultRoute);
 
             res.status(statusCode.ok).end(updatedIndex);
         } catch {
@@ -32,12 +32,21 @@ const webTemplateController = {
         }
     },
 
+    loginPage: (req, res) => {
+        const updatedIndex = replaceDefaultRoute(templates.index.replace(/{%TITLE%}/g, 'Login & Register'), templates.loginAndRegister);
+        res.status(statusCode.ok).end(updatedIndex);
+    },
+
+    home: (req, res) => {
+        res.redirect('/web/list');
+    },
+
     getJsonDb: (req, res) => {
         res.status(statusCode.ok).json(dataObj);
     },
 
     notFound: (req, res) => {
-        const updatedIndex = replaceDefaultRoute(templates.index, templates.notFound);
+        const updatedIndex = replaceDefaultRoute(templates.index.replace(/{%TITLE%}/g, '404 Not Found'), templates.notFound);
         res.status(statusCode.notFound).end(updatedIndex);
     }
 };
