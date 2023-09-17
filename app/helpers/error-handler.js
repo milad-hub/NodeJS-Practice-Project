@@ -1,4 +1,5 @@
 const statusCode = require('../config/status-codes');
+const isDevEnviroment = require('../helpers/enviroment');
 
 class AppError extends Error {
     constructor(message, statusCode) {
@@ -17,12 +18,12 @@ const handleDbErrors = (err, req, res, next) => {
 
     handleDbDuplicateFieldError(err, next);
 
-    process.env.NODE_ENV === 'development' ? next(err) : next(new AppError('Something went wrong', statusCode.internalServerError));
+    isDevEnviroment ? next(err) : next(new AppError('Something went wrong', statusCode.internalServerError));
 };
 
 const handleDbCastErrors = (err, next) => {
     if (err.name === 'CastError') {
-        return next(new AppError(`Invalid ${err.path}:  ${err.value}`, statusCode.notFound));
+        return next(new AppError(`Invalid ${err.path}:  ${err.value}`, statusCode.badRequest));
     }
 };
 
@@ -71,8 +72,8 @@ const handleAsyncErrors = (fn) => {
 
 module.exports = {
     AppError,
-    handleAsyncErrors,
     handleDbErrors,
+    handleAsyncErrors,
     handleBadRequestError,
     handlePaginationError,
     handleUserNotExistsError,

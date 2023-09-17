@@ -3,10 +3,11 @@ const user = require('../routes/user.routes');
 const addRequestTime = require('../middlewares/request-time.spec');
 const { globalErrorHandler, routeNotFoundHandler } = require('../middlewares/error.middleware');
 const { handleDbErrors } = require('../helpers/error-handler');
+const isDevEnvironment = require('../helpers/enviroment');
 
 module.exports = (app) => {
 
-    if (process.env.NODE_ENV === 'development') {
+    if (isDevEnvironment) {
         app.use('*', addRequestTime);
     }
 
