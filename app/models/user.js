@@ -1,4 +1,9 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+
+const saltRounds = 12;
+const emailRegex = '/^[^\s@]+@[^\s@]+\.[^\s@]+$/';
+const usernameRegex = '/^[a-z0-9]{4,}$/';
 
 const userSchema = new mongoose.Schema({
 
@@ -14,12 +19,15 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    age: {
-        type: Number,
+    dateOfBirth: {
+        type: Date,
         required: true,
         validate: {
             validator: function (value) {
-                return value >= 18 && value <= 100;
+                const currentDate = new Date();
+                const userDate = new Date(value);
+                const age = currentDate.getFullYear() - userDate.getFullYear();
+                return age >= 18 && age <= 100;
             },
             message: 'Age must be between 18 and 100'
         }
@@ -27,11 +35,41 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        validate: {
+            validator: function (value) {
+                return emailRegex.test(value) && !value.includes('+');
+            },
+            message: 'Invalid email format'
+        }
     },
-    hobbies: {
+    username: {
         type: String,
-        required: false
+        required: true,
+        unique: true,
+        validate: {
+            validator: function (value) {
+                return usernameRegex.test(value);
+            },
+            message: 'Username must be at least 4 characters long and contain only lowercase letters and numbers'
+        }
+    },
+    password: {
+        type: String,
+        required: true,
+        select: false,
+        minlength: [8, 'Password must be at least 8 characters long'],
+        maxlength: [32, 'Password cannot be longer than 32 characters']
+    },
+    passwordConfirm: {
+        type: String,
+        required: [true, 'Please confirm your password'],
+        validate: {
+            validator: function (value) {
+                return value === this.password;
+            },
+            message: 'Passwords do not match'
+        }
     },
     isActive: {
         type: Boolean,
@@ -42,7 +80,7 @@ const userSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         required: true,
-        default: Date.now()
+        default: Date.now
     }
 
 },
@@ -57,6 +95,21 @@ userSchema.pre('save', function (next) {
     this.createdAt = new Date();
     next();
 });
+
+userSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) { return next(); }
+
+    this.password = await bcrypt.hash(this.password, saltRounds);
+    this.passwordConfirm = undefined;
+    next();
+});
+
+userSchema.pre('save', function (next) {
+    this.username = this.username.toLowerCase();
+    next();
+});
+
+////////////////////////////////////////////////////////////////////////////
 
 const UserStatsAggregateOptions = [
     {

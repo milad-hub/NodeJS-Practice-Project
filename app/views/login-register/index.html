@@ -19,6 +19,7 @@
             width: 100%;
             padding: 20px;
             box-sizing: border-box;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
         .toggle-btn {
@@ -56,12 +57,15 @@
             transform: scale(1.03);
         }
 
-        .login-form {
+        .login-form,
+        .register-form {
             display: block;
+            transition: opacity 0.3s, transform 0.3s;
         }
 
         .register-form {
-            display: none;
+            opacity: 0;
+            transform: translateX(100%);
         }
 
         .form-group {
@@ -113,18 +117,27 @@
             </form>
         </div>
         <div class="register-form">
-            <form>
+            <form onsubmit="formatDate(event)">
                 <div class="form-group">
-                    <input type="text" placeholder="Username">
+                    <input type="text" placeholder="First Name" required>
                 </div>
                 <div class="form-group">
-                    <input type="email" placeholder="Email">
+                    <input type="text" placeholder="Last Name" required>
                 </div>
                 <div class="form-group">
-                    <input type="password" placeholder="Password">
+                    <input type="date" id="dob" placeholder="Date of Birth" pattern="\d{2}/\d{2}/\d{4}" required>
                 </div>
                 <div class="form-group">
-                    <input type="password" placeholder="Confirm Password">
+                    <input type="email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Password" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Confirm Password" required>
                 </div>
                 <button class="form-btn">Register</button>
             </form>
@@ -143,9 +156,21 @@
             };
 
             activeButton.classList.remove('active');
-            forms[formToShow].show.style.display = "block";
+            forms[formToShow].show.style.opacity = "1";
+            forms[formToShow].show.style.transform = "translateX(0)";
+            forms[formToShow].hide.style.opacity = "0";
+            forms[formToShow].hide.style.transform = "translateX(100%)";
             forms[formToShow].hide.style.display = "none";
             document.querySelector(`.btn:nth-child(${forms[formToShow].btnIndex})`).classList.add('active');
+        }
+
+        function formatDate(event) {
+            event.preventDefault();
+            const dobInput = document.getElementById('dob');
+            const dateValue = dobInput.value;
+            const parts = dateValue.split('-');
+            const formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+            dobInput.value = formattedDate;
         }
     </script>
 </body>
