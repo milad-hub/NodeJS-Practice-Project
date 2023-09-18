@@ -7,25 +7,37 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: linear-gradient(to right, #3498db, #2ecc71);
+            background: linear-gradient(to right, #3498db, #2ecc71, #e74c3c, #f39c12, #9b59b6, #3498db);
+            background-size: 1200% 100%;
+            animation: gradientAnimation 20s infinite linear;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            100% {
+                background-position: 100% 50%;
+            }
         }
 
         .container {
             background: #fff;
             border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, .2);
             overflow: hidden;
             max-width: 400px;
             width: 100%;
             padding: 20px;
             box-sizing: border-box;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: all .3s
         }
 
         .toggle-btn {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 20px
         }
 
         .toggle-btn .btn {
@@ -38,8 +50,7 @@
             border: none;
             background: none;
             font-size: 18px;
-            transition: color 0.3s;
-            transition: 0.1s;
+            transition: color .3s, font-size .3s
         }
 
         .toggle-btn .btn.active:before {
@@ -49,34 +60,30 @@
             bottom: -3px;
             width: 100%;
             height: 3px;
-            background: #3498db;
+            background: #3498db
         }
 
         .toggle-btn .btn:hover {
             color: #12a14e;
-            transform: scale(1.03);
+            transform: scale(1.03)
         }
 
         .login-form,
         .register-form {
-            display: block;
-            transition: opacity 0.3s, transform 0.3s;
-        }
-
-        .register-form {
-            opacity: 0;
-            transform: translateX(100%);
+            display: none;
+            transition: all .3s;
+            animation: fadeIn .5s
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 15px
         }
 
         .form-group input {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 5px
         }
 
         .form-btn {
@@ -89,12 +96,26 @@
             border-radius: 5px;
             font-size: 16px;
             font-weight: bold;
-            transition: 0.3s;
+            transition: .3s
         }
 
         .form-btn:hover {
             background: #12a14e;
-            transform: scale(1.03);
+            transform: scale(1.03)
+        }
+
+        .active-form {
+            display: block
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0
+            }
+
+            to {
+                opacity: 1
+            }
         }
     </style>
 </head>
@@ -105,7 +126,7 @@
             <div class="btn active" onclick="toggleFormDisplay('login')">Login</div>
             <div class="btn" onclick="toggleFormDisplay('register')">Register</div>
         </div>
-        <div class="login-form">
+        <div class="login-form active-form">
             <form>
                 <div class="form-group">
                     <input type="text" placeholder="Username">
@@ -156,10 +177,7 @@
             };
 
             activeButton.classList.remove('active');
-            forms[formToShow].show.style.opacity = "1";
-            forms[formToShow].show.style.transform = "translateX(0)";
-            forms[formToShow].hide.style.opacity = "0";
-            forms[formToShow].hide.style.transform = "translateX(100%)";
+            forms[formToShow].show.style.display = "block";
             forms[formToShow].hide.style.display = "none";
             document.querySelector(`.btn:nth-child(${forms[formToShow].btnIndex})`).classList.add('active');
         }
