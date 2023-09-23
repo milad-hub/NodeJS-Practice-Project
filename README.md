@@ -1,5 +1,4 @@
 # Table of Contents
-- [Table of Contents](#table-of-contents)
   - [Node.js practice project](#nodejs-practice-project)
   - [Getting Started](#getting-started)
   - [Disclaimer](#disclaimer)
