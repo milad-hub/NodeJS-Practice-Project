@@ -12,7 +12,7 @@ To run the project follow these steps;
 
 ## Disclaimer
 
-Please note that this project is purely for purposes. As a result it not have documentation. Is regularly updated as I delve into new techniques and concepts. Feel free to explore learn and even contribute!
+Please note that this project is purely for personal purposes. As a result it not have documentation. Is regularly updated as I delve into new techniques and concepts. Feel free to explore learn and even contribute!
 
 ## About Me
 
