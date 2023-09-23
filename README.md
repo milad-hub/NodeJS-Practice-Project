@@ -6,7 +6,7 @@ To run the project follow these steps;
 
 1. Install the dependencies by running `npm install`.
 2. Start the server by running `node app.js`.
-3. Open your browser. Go to http;//localhost:3000
+3. Open your browser. Go to `http://localhost:3000`
 
 ## Disclaimer
 Please note that this project is purely for purposes. As a result it not have documentation. Is regularly updated as I delve into new techniques and concepts. Feel free to explore learn and even contribute!
