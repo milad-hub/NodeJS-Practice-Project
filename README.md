@@ -1,4 +1,14 @@
-# Node.js practice project
+# Table of Contents
+- [Table of Contents](#table-of-contents)
+  - [Node.js practice project](#nodejs-practice-project)
+  - [Getting Started](#getting-started)
+  - [Disclaimer](#disclaimer)
+  - [About Me](#about-me)
+  - [Social](#social)
+  - [Tech Stacks](#tech-stacks)
+
+
+## Node.js practice project
 
 This project serves you as a platform to explore the intricacies of Node.js and JavaScript. It's a place where you can experiment with concepts, such as routing in Express.js and handling databases.
 
