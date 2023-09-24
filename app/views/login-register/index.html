@@ -21,19 +21,22 @@
                     #9C27B0,
                     #673AB7,
                     #3F51B5);
-            background-size: 1300% 100%;
+            background-size: 2000% 100%;
             animation: gradientAnimation 60s infinite linear;
         }
 
         @keyframes gradientAnimation {
-            0% {
+
+            0%,
+            100% {
                 background-position: 0% 50%;
             }
 
-            100% {
+            50% {
                 background-position: 100% 50%;
             }
         }
+
 
         .container {
             background: #fff;
