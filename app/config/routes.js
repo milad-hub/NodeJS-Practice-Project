@@ -1,3 +1,5 @@
+const express = require('express');
+const path = require('path');
 const webTemplate = require('../routes/template.routes');
 const user = require('../routes/user.routes');
 const addRequestTime = require('../middlewares/request-time.spec');
@@ -14,7 +16,8 @@ module.exports = (app) => {
     app
         .get('/', (req, res) => {
             res.redirect('/web');
-        });
+        })
+        .use(express.static(path.join(__dirname, '../')));
 
     app
         .use('/web', webTemplate)

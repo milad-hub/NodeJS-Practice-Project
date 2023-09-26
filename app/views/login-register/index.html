@@ -1,210 +1,49 @@
-<head>
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Quicksand', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: linear-gradient(45deg,
-                    #2196F3,
-                    #03A9F4,
-                    #00BCD4,
-                    #009688,
-                    #4CAF50,
-                    #8BC34A,
-                    #CDDC39,
-                    #FFEB3B,
-                    #F44336,
-                    #E91E63,
-                    #9C27B0,
-                    #673AB7,
-                    #3F51B5);
-            background-size: 2000% 100%;
-            animation: gradientAnimation 60s infinite linear;
-        }
+<body class="login__register-body">
 
-        @keyframes gradientAnimation {
-
-            0%,
-            100% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-        }
-
-
-        .container {
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, .2);
-            overflow: hidden;
-            max-width: 400px;
-            width: 100%;
-            padding: 20px;
-            box-sizing: border-box;
-            transition: all .3s
-        }
-
-        .toggle-btn {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px
-        }
-
-        .toggle-btn .btn {
-            flex: 1;
-            padding: 10px;
-            cursor: pointer;
-            text-align: center;
-            font-weight: bold;
-            position: relative;
-            border: none;
-            background: none;
-            font-size: 18px;
-            transition: color .1s, font-size .5s
-        }
-
-        .toggle-btn .btn.active:before {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -3px;
-            width: 100%;
-            height: 3px;
-            background: #3498db
-        }
-
-        .toggle-btn .btn:hover {
-            color: #12a14e;
-            transform: scale(1.03)
-        }
-
-        .login-form,
-        .register-form {
-            display: none;
-            transition: all .3s;
-            animation: fadeIn .5s
-        }
-
-        .form-group {
-            margin-bottom: 15px
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px
-        }
-
-        .form-btn {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            background: #3498db;
-            color: #fff;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            transition: .3s
-        }
-
-        .form-btn:hover {
-            background: #12a14e;
-            transform: scale(1.03)
-        }
-
-        .active-form {
-            display: block
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0
-            }
-
-            to {
-                opacity: 1
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <div class="toggle-btn">
-            <div class="btn active" onclick="toggleFormDisplay('login')">Login</div>
-            <div class="btn" onclick="toggleFormDisplay('register')">Register</div>
+    <div class="login__register-container">
+        <div class="login__register-toggle-btn">
+            <div class="login__register-btn active" onclick="toggleFormDisplay('login')">Login</div>
+            <div class="login__register-btn" onclick="toggleFormDisplay('register')">Register</div>
         </div>
-        <div class="login-form active-form">
+        <div class="login__register-login-form login__register-active-form">
             <form>
-                <div class="form-group">
+                <div class="login__register-form-group">
                     <input type="text" placeholder="Username" required>
                 </div>
-                <div class="form-group">
+                <div class="login__register-form-group">
                     <input type="password" placeholder="Password" required>
                 </div>
-                <button class="form-btn">Login</button>
+                <button class="login__register-form-btn">Login</button>
             </form>
         </div>
-        <div class="register-form">
+
+        <div class="login__register-register-form">
             <form onsubmit="formatDate(event)">
-                <div class="form-group">
+                <div class="login__register-form-group">
                     <input type="text" placeholder="First Name" required>
                 </div>
-                <div class="form-group">
+                <div class="login__register-form-group">
                     <input type="text" placeholder="Last Name" required>
                 </div>
-                <div class="form-group">
+                <div class="login__register-form-group">
                     <input type="date" id="dob" placeholder="Date of Birth" pattern="\d{2}/\d{2}/\d{4}" required>
                 </div>
-                <div class="form-group">
+                <div class="login__register-form-group">
                     <input type="email" placeholder="Email" required>
                 </div>
-                <div class="form-group">
+                <div class="login__register-form-group">
                     <input type="text" placeholder="Username" required>
                 </div>
-                <div class="form-group">
+                <div class="login__register-form-group">
                     <input type="password" placeholder="Password" required>
                 </div>
-                <div class="form-group">
+                <div class="login__register-form-group">
                     <input type="password" placeholder="Confirm Password" required>
                 </div>
-                <button class="form-btn">Register</button>
+                <button class="login__register-form-btn">Register</button>
             </form>
         </div>
     </div>
 
-    <script>
-        function toggleFormDisplay(formToShow) {
-            const loginForm = document.querySelector('.login-form');
-            const registerForm = document.querySelector('.register-form');
-            const activeButton = document.querySelector('.btn.active');
-
-            const forms = {
-                'login': { show: loginForm, hide: registerForm, btnIndex: 1 },
-                'register': { show: registerForm, hide: loginForm, btnIndex: 2 }
-            };
-
-            activeButton.classList.remove('active');
-            forms[formToShow].show.style.display = "block";
-            forms[formToShow].hide.style.display = "none";
-            document.querySelector(`.btn:nth-child(${forms[formToShow].btnIndex})`).classList.add('active');
-        }
-
-        function formatDate(event) {
-            event.preventDefault();
-            const dobInput = document.getElementById('dob');
-            const dateValue = dobInput.value;
-            const parts = dateValue.split('-');
-            const formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
-            dobInput.value = formattedDate;
-        }
-    </script>
+    <script src="../../public/js/login-register.js"></script>
 </body>

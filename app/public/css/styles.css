@@ -1,3 +1,5 @@
+/* General Styles */
+
 body {
   font-family: 'Quicksand', sans-serif;
 }
@@ -20,4 +22,185 @@ td {
 tr.blue-background th {
   background-color: rgb(87, 87, 236);
   color: white;
+}
+
+/* Login and Register Page Styles */
+
+.login__register-body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(45deg,
+      #2196F3,
+      #03A9F4,
+      #00BCD4,
+      #009688,
+      #4CAF50,
+      #8BC34A,
+      #CDDC39,
+      #FFEB3B,
+      #F44336,
+      #E91E63,
+      #9C27B0,
+      #673AB7,
+      #3F51B5);
+  background-size: 2000% 100%;
+  animation: gradientAnimation 60s infinite linear;
+}
+
+@keyframes gradientAnimation {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.login__register-container {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, .2);
+  overflow: hidden;
+  max-width: 400px;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: all .3s;
+}
+
+.login__register-toggle-btn {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.login__register-toggle-btn .login__register-btn {
+  flex: 1;
+  padding: 10px;
+  cursor: pointer;
+  text-align: center;
+  font-weight: bold;
+  position: relative;
+  border: none;
+  background: none;
+  font-size: 18px;
+  transition: color .1s, font-size .5s;
+}
+
+.login__register-toggle-btn .login__register-btn.active:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 3px;
+  background: #3498db;
+}
+
+.login__register-toggle-btn .login__register-btn:hover {
+  color: #12a14e;
+  transform: scale(1.03);
+}
+
+.login__register-login-form,
+.login__register-register-form {
+  display: none;
+  transition: all .3s;
+  animation: fadeIn .5s;
+}
+
+.login__register-form-group {
+  margin-bottom: 15px;
+}
+
+.login__register-form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.login__register-form-btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: #3498db;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  transition: .3s;
+}
+
+.login__register-form-btn:hover {
+  background: #12a14e;
+  transform: scale(1.03);
+}
+
+.login__register-active-form {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Not Found Page Styles */
+
+.not__found-body {
+  background-color: #f1f1f1;
+  font-family: Arial, sans-serif;
+  color: #333;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.not__found-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.not__found-error-code {
+  font-size: 120px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.not__found-error-message {
+  font-size: 24px;
+  margin: 20px 0;
+}
+
+.user__details-home-link,
+.not__found-home-link {
+  display: inline-block;
+  background-color: #3325ff;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.user__details-home-link:hover,
+.not__found-home-link:hover {
+  opacity: .9;
 }
