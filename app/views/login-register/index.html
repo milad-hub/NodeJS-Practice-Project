@@ -20,27 +20,28 @@
         <div class="login__register-register-form">
             <form onsubmit="formatDate(event)">
                 <div class="login__register-form-group">
-                    <input type="text" placeholder="First Name" required>
+                    <input id="firstName" type="text" placeholder="First Name" required>
                 </div>
                 <div class="login__register-form-group">
-                    <input type="text" placeholder="Last Name" required>
+                    <input id="lastName" type="text" placeholder="Last Name" required>
                 </div>
                 <div class="login__register-form-group">
-                    <input type="date" id="dob" placeholder="Date of Birth" pattern="\d{2}/\d{2}/\d{4}" required>
+                    <input id="dateOfBirth" type="date" placeholder="Date of Birth" pattern="\d{2}/\d{2}/\d{4}"
+                        required>
                 </div>
                 <div class="login__register-form-group">
-                    <input type="email" placeholder="Email" required>
+                    <input id="email" type="email" placeholder="Email" required>
                 </div>
                 <div class="login__register-form-group">
-                    <input type="text" placeholder="Username" required>
+                    <input id="username" type="text" placeholder="Username" required>
                 </div>
                 <div class="login__register-form-group">
-                    <input type="password" placeholder="Password" required>
+                    <input id="password" type="password" placeholder="Password" required>
                 </div>
                 <div class="login__register-form-group">
-                    <input type="password" placeholder="Confirm Password" required>
+                    <input id="passwordConfirm" type="password" placeholder="Confirm Password" required>
                 </div>
-                <button class="login__register-form-btn">Register</button>
+                <button id="registerButton" class="login__register-form-btn">Register</button>
             </form>
         </div>
     </div>

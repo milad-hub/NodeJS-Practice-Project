@@ -177,13 +177,13 @@ tr.blue-background th {
   height: 100vh;
 }
 
-.not__found-error-code {
+.not__found-error--code {
   font-size: 120px;
   font-weight: bold;
   margin: 0;
 }
 
-.not__found-error-message {
+.not__found-error--message {
   font-size: 24px;
   margin: 20px 0;
 }

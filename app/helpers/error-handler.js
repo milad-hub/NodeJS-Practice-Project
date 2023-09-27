@@ -1,4 +1,4 @@
-const statusCode = require('../config/status-codes');
+const { statusCode } = require('../config/config');
 const isDevEnviroment = require('../helpers/enviroment');
 
 class AppError extends Error {

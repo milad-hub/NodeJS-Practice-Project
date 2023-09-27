@@ -1,9 +1,9 @@
 const { User, UserStatsAggregateOptions, UserAgeAggregateOptions } = require('../models/user');
-const { UserServices } = require('../services/user');
+const { UserServices, UserApiServices } = require('../services/user');
 const { CommonServices } = require('../services/common');
 const { sendResponse } = require('../helpers/response-handler');
 const { handleAsyncErrors, handleUserNotExistsError } = require('../helpers/error-handler');
-const statusCode = require('../config/status-codes');
+const { statusCode } = require('../config/config');
 
 class UserController {
 
@@ -89,7 +89,18 @@ class UserAggregationController {
     };
 }
 
+class UserApiController {
+    constructor() {
+        this._userApiServices = new UserApiServices();
+    }
+
+    async createUser(userData) {
+        return await this._userApiServices.createUser(userData);
+    }
+}
+
 module.exports = {
     UserController,
     UserAggregationController,
+    UserApiController
 };

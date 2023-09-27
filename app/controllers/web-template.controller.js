@@ -1,6 +1,6 @@
 const fs = require('fs');
 const url = require('url');
-const statusCode = require('../config/status-codes');
+const { statusCode } = require('../config/config');
 const { templates, replaceDefaultRoute, replaceTemplate } = require('../services/template');
 
 const dataObj = JSON.parse(fs.readFileSync(`${__dirname}/../db/db.json`));

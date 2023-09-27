@@ -1,6 +1,6 @@
 const { AppError } = require('../helpers/error-handler');
 const { sendResponse } = require('../helpers/response-handler');
-const statusCode = require('../config/status-codes');
+const { statusCode } = require('../config/config');
 
 const routeNotFoundHandler = (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on the server`, statusCode.notFound));

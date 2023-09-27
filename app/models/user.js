@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const saltRounds = 12;
-const emailRegex = '/^[^\s@]+@[^\s@]+\.[^\s@]+$/';
-const usernameRegex = '/^[a-z0-9]{4,}$/';
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const usernameRegex = /^[a-z0-9]{4,}$/;
 
 const userSchema = new mongoose.Schema({
 
