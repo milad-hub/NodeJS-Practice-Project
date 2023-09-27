@@ -1,18 +1,3 @@
-const isDevEnvironment = require('../helpers/enviroment');
-
-const baseApiUrl = () => {
-    const Url = isDevEnvironment ? 'http://127.0.0.1:3000/api' : 'http://127.0.0.1:3000/api';
-    return Url;
-};
-
-const httpMethods = {
-    GET: 'GET',
-    POST: 'POST',
-    PATCH: 'PATCH',
-    PUT: 'PUT',
-    DELETE: 'DELETE'
-};
-
 const statusCode = {
     ok: 200,
     created: 201,
@@ -31,25 +16,6 @@ const statusCode = {
     gatewayTimeout: 504
 };
 
-const HttpHeaders = {
-    content: {
-        json: { 'Content-Type': 'application/json' },
-        xml: { 'Content-Type': 'application/xml' },
-        form: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        pdf: { 'Content-Type': 'application/pdf' },
-        text: { 'Content-Type': 'text/plain' },
-        html: { 'Content-Type': 'text/html' },
-        png: { 'Content-Type': 'image/png' },
-        jpeg: { 'Content-Type': 'image/jpeg' },
-        gif: { 'Content-Type': 'image/gif' },
-        binary: { 'Content-Type': 'application/octet-stream' },
-        formData: { 'Content-Type': 'multipart/form-data' },
-    }
-};
-
 module.exports = {
-    baseApiUrl,
-    httpMethods,
-    statusCode,
-    HttpHeaders
+    statusCode
 };

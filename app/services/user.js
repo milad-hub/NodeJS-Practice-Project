@@ -1,8 +1,7 @@
 const { User } = require('../models/user');
 const { CommonServices } = require('../services/common');
-const { handlePaginationError, AppError } = require('../helpers/error-handler');
-const { sendResponse } = require('../helpers/response-handler');
-const { baseApiUrl, httpMethods, statusCode, HttpHeaders } = require('../config/config');
+const { handlePaginationError } = require('../helpers/handlers/error');
+const { sendResponse } = require('../helpers/handlers/response');
 
 class UserServices {
 
@@ -56,25 +55,6 @@ class UserServices {
     }
 }
 
-class UserApiServices {
-
-    async createUser(userData) {
-        const response = await fetch(`${baseApiUrl}/user`, {
-            method: httpMethods.POST,
-            headers: HttpHeaders.content.json,
-            body: JSON.stringify(userData)
-        });
-
-        if (!response.ok) {
-            throw new AppError('Creating user failed', statusCode.internalServerError);
-        }
-
-        const data = await response.json();
-        return data;
-    }
-}
-
 module.exports = {
-    UserServices,
-    UserApiServices
+    UserServices
 };

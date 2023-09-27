@@ -1,5 +1,5 @@
-const { statusCode } = require('../config/config');
-const isDevEnviroment = require('../helpers/enviroment');
+const { statusCode } = require('../../config/config');
+const isDevEnviroment = require('../enviroment');
 
 class AppError extends Error {
     constructor(message, statusCode) {

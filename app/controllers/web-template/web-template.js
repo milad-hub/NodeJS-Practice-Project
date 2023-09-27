@@ -1,16 +1,16 @@
 const fs = require('fs');
 const url = require('url');
-const { statusCode } = require('../config/config');
-const { templates, replaceDefaultRoute, replaceTemplate } = require('../services/template');
+const { statusCode } = require('../../config/config');
+const { templates, replaceDefaultRoute, replaceTemplate } = require('../../services/web-template');
 
-const dataObj = JSON.parse(fs.readFileSync(`${__dirname}/../db/db.json`));
+const dataObj = JSON.parse(fs.readFileSync(`${__dirname}/../../db/db.json`));
 
 const webTemplateController = {
 
     listOfUsersPage: (req, res) => {
-        const userTableHtml = dataObj.map(el => replaceTemplate(templates.home.table, el)).join('');
-        const userDetailsRoute = templates.home.index
-            .replace(/{%USER_DETAILS%}/g, templates.home.userDetails)
+        const userTableHtml = dataObj.map(el => replaceTemplate(templates.users.table, el)).join('');
+        const userDetailsRoute = templates.users.index
+            .replace(/{%USER_DETAILS%}/g, templates.users.userDetails)
             .replace(/{%HOME_TABLE%}/g, userTableHtml);
 
         const updatedIndex = replaceDefaultRoute(templates.index.replace(/{%TITLE%}/g, 'List of Users'), userDetailsRoute);
@@ -33,12 +33,12 @@ const webTemplateController = {
     },
 
     loginPage: (req, res) => {
-        const updatedIndex = replaceDefaultRoute(templates.index.replace(/{%TITLE%}/g, 'Login & Register'), templates.loginAndRegister);
+        const updatedIndex = replaceDefaultRoute(templates.index.replace(/{%TITLE%}/g, 'User Authentication'), templates.auth);
         res.status(statusCode.ok).end(updatedIndex);
     },
 
     redirectToHomePage: (req, res) => {
-        res.redirect('/web/list');
+        res.redirect('/web/users');
     },
 
     getJsonDb: (req, res) => {

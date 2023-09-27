@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const webTemplateController = require('../controllers/web-template.controller');
+const webTemplateController = require('../controllers/web-template/web-template');
 
 router
     .get('/', webTemplateController.redirectToHomePage)
-    .get('/login', webTemplateController.loginPage)
-    .get('/list', webTemplateController.listOfUsersPage)
-    .get('/list/user-details', webTemplateController.getUserDetailsPage)
+    .get('/auth', webTemplateController.loginPage)
+    .get('/users', webTemplateController.listOfUsersPage)
+    .get('/users/user-details', webTemplateController.getUserDetailsPage)
     .get('/jsondb', webTemplateController.getJsonDb)
     .get('*', webTemplateController.notFoundPage);
 

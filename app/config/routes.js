@@ -4,7 +4,7 @@ const webTemplate = require('../routes/template.routes');
 const user = require('../routes/user.routes');
 const addRequestTime = require('../middlewares/request-time.spec');
 const { globalErrorHandler, routeNotFoundHandler } = require('../middlewares/error.middleware');
-const { handleDbErrors } = require('../helpers/error-handler');
+const { handleDbErrors } = require('../helpers/handlers/error');
 const isDevEnvironment = require('../helpers/enviroment');
 
 module.exports = (app) => {

@@ -1,5 +1,5 @@
-const { AppError } = require('../helpers/error-handler');
-const { sendResponse } = require('../helpers/response-handler');
+const { AppError } = require('../helpers/handlers/error');
+const { sendResponse } = require('../helpers/handlers/response');
 const { statusCode } = require('../config/config');
 
 const routeNotFoundHandler = (req, res, next) => {

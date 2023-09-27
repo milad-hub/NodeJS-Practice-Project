@@ -1,4 +1,4 @@
-const { handleInternalServerError } = require('../helpers/error-handler');
+const { handleInternalServerError } = require('../helpers/handlers/error');
 
 class CommonServices {
 

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { UserController, UserAggregationController } = require('./../controllers/user.controller');
+const { UserController, UserAggregationController } = require('./../controllers/users/user');
 const { getOldestUsers, getActiveUsers } = require('../middlewares/user.middleware');
 
 const userController = new UserController();

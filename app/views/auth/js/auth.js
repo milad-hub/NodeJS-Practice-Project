@@ -1,6 +1,6 @@
-const { UserApiController } = require('../../controllers/user.controller');
+import UserServices from '../../../public/js/services/user.js';
 
-const userApiController = new UserApiController();
+const _userServices = new UserServices();
 
 function toggleFormDisplay(formToShow) {
     const loginForm = document.querySelector('.login__register-login-form');
@@ -55,8 +55,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             passwordConfirm: passwordConfirm
         };
 
-        console.log(userData);
-        await userApiController.createUser(userData);
+        await _userServices.createUser(userData);
         toggleFormDisplay('login');
     });
 });
+
+window.toggleFormDisplay = toggleFormDisplay;
+window.formatDate = formatDate;
