@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (response) {
             toastMessage('Registered Successfully', 'success');
             toggleFormDisplay('login');
+            form.reset();
         }
     });
 });
