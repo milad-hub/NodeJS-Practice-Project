@@ -1,5 +1,6 @@
 import UserServices from '../../../public/js/services/user.js';
 import { extractFormData, validatePassword } from '../../../public/js/shared/common.js';
+import { toastMessage } from '../../../public/js/shared/toast.js';
 
 const _userServices = new UserServices();
 
@@ -46,13 +47,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
         const response = await _userServices.createUser(userData);
         if (response) {
-            alert('Registered Successfully');
+            toastMessage('Registered Successfully', 'success');
             toggleFormDisplay('login');
         }
-
     });
 });
-
 
 window.toggleFormDisplay = toggleFormDisplay;
 window.formatDate = formatDate;

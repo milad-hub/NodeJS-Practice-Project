@@ -36,6 +36,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
+        lowercase: true,
         validate: {
             validator: function (value) {
                 return emailRegex.test(value) && !value.includes('+');
@@ -47,6 +48,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
+        lowercase: true,
         validate: {
             validator: function (value) {
                 return usernameRegex.test(value);
@@ -94,10 +96,7 @@ userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) { return next(); }
     this.password = await bcrypt.hash(this.password, saltRounds);
     this.passwordConfirm = undefined;
-
-    this.username = this.username.toLowerCase();
     next();
-
 });
 
 ////////////////////////////////////////////////////////////////////////////

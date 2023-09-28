@@ -1,5 +1,6 @@
 import { baseApiUrl, statusCode } from '../shared/config.js';
 import AppError from '../shared/error.js';
+import { toastMessage } from '../shared/toast.js';
 
 class HttpClient {
 
@@ -14,7 +15,7 @@ class HttpClient {
             const responseData = await response.json();
 
             if (!response.ok) {
-                alert(responseData.message);
+                toastMessage(responseData.message, 'error');
                 throw new AppError(responseData.message, response.status);
             }
 

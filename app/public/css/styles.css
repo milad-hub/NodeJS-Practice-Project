@@ -24,6 +24,41 @@ tr.blue-background th {
   color: white;
 }
 
+/* Toast Message */
+
+.toast-message {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.toast-message.show {
+  opacity: 1;
+}
+
+.toast-message.hide {
+  opacity: 0;
+}
+
+.message {
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+}
+
+.message.success {
+  background-color: #33a037;
+  color: white;
+}
+
+.message.error {
+  background-color: #d45145;
+  color: white;
+}
+
 /* Login and Register Page Styles */
 
 .login__register-body {
