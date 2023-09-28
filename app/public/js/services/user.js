@@ -7,13 +7,13 @@ class UserServices {
         this.httpClient = new HttpClient();
     }
 
-    async createUser(userData) {
-        try {
-            return await this.httpClient.request('user', httpMethods.POST, httpHeaders.content.json, userData);
-        } catch (error) {
-            throw error;
-        }
-    }
+    // async createUser(userData) {
+    //     try {
+    //         return await this.httpClient.request('user', httpMethods.POST, httpHeaders.content.json, userData);
+    //     } catch (error) {
+    //         throw error;
+    //     }
+    // }
 }
 
 export default UserServices;

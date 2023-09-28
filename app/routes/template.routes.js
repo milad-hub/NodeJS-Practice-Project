@@ -5,7 +5,7 @@ const webTemplateController = require('../controllers/web-template/web-template'
 
 router
     .get('/', webTemplateController.redirectToHomePage)
-    .get('/auth', webTemplateController.loginPage)
+    .get('/auth', webTemplateController.authPage)
     .get('/users', webTemplateController.listOfUsersPage)
     .get('/users/user-details', webTemplateController.getUserDetailsPage)
     .get('/jsondb', webTemplateController.getJsonDb)

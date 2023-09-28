@@ -1,11 +1,12 @@
 const express = require('express');
 const path = require('path');
-const webTemplate = require('../routes/template.routes');
-const user = require('../routes/user.routes');
-const addRequestTime = require('../middlewares/request-time.spec');
 const { globalErrorHandler, routeNotFoundHandler } = require('../middlewares/error.middleware');
 const { handleDbErrors } = require('../helpers/handlers/error');
 const isDevEnvironment = require('../helpers/enviroment');
+const addRequestTime = require('../middlewares/request-time.spec');
+const webTemplate = require('../routes/template.routes');
+const auth = require('../routes/auth.routes');
+const user = require('../routes/user.routes');
 
 module.exports = (app) => {
 
@@ -21,6 +22,7 @@ module.exports = (app) => {
 
     app
         .use('/web', webTemplate)
+        .use('/api/auth', auth)
         .use('/api/user', user);
 
     app

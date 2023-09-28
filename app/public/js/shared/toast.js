@@ -1,4 +1,4 @@
-function toastMessage(message, type) {
+function displayToast(message, type) {
     const messageContainer = document.getElementById('toastMessage');
     const newMessage = createMessageElement(message, type);
     messageContainer.appendChild(newMessage);
@@ -34,6 +34,4 @@ function hideMessageContainer(messageContainer) {
     messageContainer.style.opacity = 0;
 }
 
-export {
-    toastMessage
-};
+export default displayToast;

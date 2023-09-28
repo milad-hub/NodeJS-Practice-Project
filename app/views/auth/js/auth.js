@@ -1,8 +1,8 @@
-import UserServices from '../../../public/js/services/user.js';
+import AuthServices from '../../../public/js/services/auth.js';
+import displayToast from '../../../public/js/shared/toast.js';
 import { extractFormData, validatePassword } from '../../../public/js/shared/common.js';
-import { toastMessage } from '../../../public/js/shared/toast.js';
 
-const _userServices = new UserServices();
+const _authServices = new AuthServices();
 
 function toggleFormDisplay(formToShow) {
     const loginForm = document.querySelector('.login__register-login-form');
@@ -32,6 +32,7 @@ function formatDate(event) {
 document.addEventListener('DOMContentLoaded', async function () {
     const registerButton = document.getElementById('registerButton');
     registerButton.addEventListener('click', async function (event) {
+        registerButton.disabled = true;
         event.preventDefault();
 
         const form = document.getElementById('registerForm');
@@ -42,14 +43,27 @@ document.addEventListener('DOMContentLoaded', async function () {
         const userData = extractFormData(formData, allowedFields);
 
         if (!validatePassword(userData.password, userData.passwordConfirm)) {
-            toastMessage('Passwords do not match. Please try again', 'error');
+            registerButton.disabled = false;
+            displayToast('Passwords do not match. Please try again', 'error');
             return;
         }
-        const response = await _userServices.createUser(userData);
-        if (response) {
-            toastMessage('Registered Successfully', 'success');
-            toggleFormDisplay('login');
-            form.reset();
+
+        try {
+            const response = await _authServices.registerUser(userData);
+            if (response) {
+                displayToast('Registered Successfully', 'success');
+                toggleFormDisplay('login');
+                form.reset();
+            }
+
+        } catch (error) {
+            throw error;
+        } finally {
+            // to prevent users from mass clicking, I will implement a better solution later!
+            // Lodash as global api service
+            setTimeout(() => {
+                registerButton.disabled = false;
+            }, 1000);
         }
     });
 });

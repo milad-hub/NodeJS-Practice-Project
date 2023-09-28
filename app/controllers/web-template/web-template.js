@@ -32,7 +32,7 @@ const webTemplateController = {
         }
     },
 
-    loginPage: (req, res) => {
+    authPage: (req, res) => {
         const updatedIndex = replaceDefaultRoute(templates.index.replace(/{%TITLE%}/g, 'User Authentication'), templates.auth);
         res.status(statusCode.ok).end(updatedIndex);
     },

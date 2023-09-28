@@ -1,6 +1,6 @@
-import { baseApiUrl, statusCode } from '../shared/config.js';
 import AppError from '../shared/error.js';
-import { toastMessage } from '../shared/toast.js';
+import displayToast from '../shared/toast.js';
+import { baseApiUrl, statusCode } from '../shared/config.js';
 
 class HttpClient {
 
@@ -15,7 +15,7 @@ class HttpClient {
             const responseData = await response.json();
 
             if (!response.ok) {
-                toastMessage(responseData.message, 'error');
+                displayToast(responseData.message, 'error');
                 throw new AppError(responseData.message, response.status);
             }
 
