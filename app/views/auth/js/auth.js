@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const userData = extractFormData(formData, allowedFields);
 
         if (!validatePassword(userData.password, userData.passwordConfirm)) {
-            alert('Passwords do not match. Please try again.');
+            toastMessage('Passwords do not match. Please try again', 'error');
             return;
         }
         const response = await _userServices.createUser(userData);
