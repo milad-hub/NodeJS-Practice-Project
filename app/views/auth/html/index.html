@@ -1,47 +1,47 @@
-<body class="login__register-body">
+<body class="auth-body">
 
-    <div class="login__register-container">
-        <div class="login__register-toggle-btn">
-            <div class="login__register-btn active" onclick="toggleFormDisplay('login')">Login</div>
-            <div class="login__register-btn" onclick="toggleFormDisplay('register')">Register</div>
+    <div class="auth-container">
+        <div class="auth-toggle-btn">
+            <div class="auth-btn active" onclick="toggleFormDisplay('login')">Login</div>
+            <div class="auth-btn" onclick="toggleFormDisplay('register')">Register</div>
         </div>
-        <div class="login__register-login-form login__register-active-form">
+        <div class="auth-login-form auth-active-form">
             <form>
-                <div class="login__register-form-group">
+                <div class="auth-form-group">
                     <input type="text" placeholder="Username" required>
                 </div>
-                <div class="login__register-form-group">
+                <div class="auth-form-group">
                     <input type="password" placeholder="Password" required>
                 </div>
-                <button class="login__register-form-btn">Login</button>
+                <button class="auth-form-btn">Login</button>
             </form>
         </div>
 
-        <div class="login__register-register-form">
+        <div class="auth-register-form">
             <form id="registerForm" onsubmit="formatDate(event)">
-                <div class="login__register-form-group">
+                <div class="auth-form-group">
                     <input name="firstName" type="text" placeholder="First Name" required>
                 </div>
-                <div class="login__register-form-group">
+                <div class="auth-form-group">
                     <input name="lastName" type="text" placeholder="Last Name" required>
                 </div>
-                <div class="login__register-form-group">
+                <div class="auth-form-group">
                     <input name="dateOfBirth" type="date" placeholder="Date of Birth" pattern="\d{2}/\d{2}/\d{4}"
                         required>
                 </div>
-                <div class="login__register-form-group">
+                <div class="auth-form-group">
                     <input name="email" type="email" placeholder="Email" required>
                 </div>
-                <div class="login__register-form-group">
+                <div class="auth-form-group">
                     <input name="username" type="text" placeholder="Username" required>
                 </div>
-                <div class="login__register-form-group">
+                <div class="auth-form-group">
                     <input name="password" type="password" placeholder="Password" required>
                 </div>
-                <div class="login__register-form-group">
+                <div class="auth-form-group">
                     <input name="passwordConfirm" type="password" placeholder="Confirm Password" required>
                 </div>
-                <button id="registerButton" class="login__register-form-btn">Register</button>
+                <button id="registerButton" class="auth-form-btn">Register</button>
             </form>
         </div>
     </div>

@@ -1,5 +1,5 @@
 function displayToast(message, type) {
-    const messageContainer = document.getElementById('toastMessage');
+    const messageContainer = document.getElementById('displayToast');
     const newMessage = createMessageElement(message, type);
     messageContainer.appendChild(newMessage);
     showMessageContainer(messageContainer);

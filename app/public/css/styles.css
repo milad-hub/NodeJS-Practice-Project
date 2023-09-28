@@ -24,9 +24,9 @@ tr.blue-background th {
   color: white;
 }
 
-/* Toast Message */
+/* Display Toast */
 
-.toast-message {
+.display__toast {
   position: fixed;
   bottom: 10px;
   left: 10px;
@@ -35,11 +35,11 @@ tr.blue-background th {
   transition: opacity 0.3s ease-in-out;
 }
 
-.toast-message.show {
+.display__toast.show {
   opacity: 1;
 }
 
-.toast-message.hide {
+.display__toast.hide {
   opacity: 0;
 }
 
@@ -47,21 +47,20 @@ tr.blue-background th {
   padding: 10px;
   margin: 10px 0;
   border-radius: 5px;
+  background-color: #fcfcfc;
 }
 
 .message.success {
-  background-color: #33a037;
-  color: white;
+  color: green;
 }
 
 .message.error {
-  background-color: #d45145;
-  color: white;
+  color: red;
 }
 
-/* Login and Register Page Styles */
+/* Auth Page Styles */
 
-.login__register-body {
+.auth-body {
   margin: 0;
   display: flex;
   justify-content: center;
@@ -97,7 +96,7 @@ tr.blue-background th {
   }
 }
 
-.login__register-container {
+.auth-container {
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, .2);
@@ -109,13 +108,13 @@ tr.blue-background th {
   transition: all .3s;
 }
 
-.login__register-toggle-btn {
+.auth-toggle-btn {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
 }
 
-.login__register-toggle-btn .login__register-btn {
+.auth-toggle-btn .auth-btn {
   flex: 1;
   padding: 10px;
   cursor: pointer;
@@ -128,7 +127,7 @@ tr.blue-background th {
   transition: color .1s, font-size .5s;
 }
 
-.login__register-toggle-btn .login__register-btn.active:before {
+.auth-toggle-btn .auth-btn.active:before {
   content: '';
   position: absolute;
   left: 0;
@@ -138,30 +137,30 @@ tr.blue-background th {
   background: #3498db;
 }
 
-.login__register-toggle-btn .login__register-btn:hover {
+.auth-toggle-btn .auth-btn:hover {
   color: #12a14e;
   transform: scale(1.03);
 }
 
-.login__register-login-form,
-.login__register-register-form {
+.auth-login-form,
+.auth-register-form {
   display: none;
   transition: all .3s;
   animation: fadeIn .5s;
 }
 
-.login__register-form-group {
+.auth-form-group {
   margin-bottom: 15px;
 }
 
-.login__register-form-group input {
+.auth-form-group input {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
 
-.login__register-form-btn {
+.auth-form-btn {
   width: 100%;
   padding: 10px;
   border: none;
@@ -174,12 +173,12 @@ tr.blue-background th {
   transition: .3s;
 }
 
-.login__register-form-btn:hover {
+.auth-form-btn:hover {
   background: #12a14e;
   transform: scale(1.03);
 }
 
-.login__register-active-form {
+.auth-active-form {
   display: block;
 }
 

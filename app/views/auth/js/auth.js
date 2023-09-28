@@ -1,13 +1,13 @@
 import AuthServices from '../../../public/js/services/auth.js';
 import displayToast from '../../../public/js/shared/toast.js';
-import { extractFormData, validatePassword } from '../../../public/js/shared/common.js';
+import { extractFormData, validatePassword, isFormFilled } from '../../../public/js/shared/common.js';
 
 const _authServices = new AuthServices();
 
 function toggleFormDisplay(formToShow) {
-    const loginForm = document.querySelector('.login__register-login-form');
-    const registerForm = document.querySelector('.login__register-register-form');
-    const activeButton = document.querySelector('.login__register-btn.active');
+    const loginForm = document.querySelector('.auth-login-form');
+    const registerForm = document.querySelector('.auth-register-form');
+    const activeButton = document.querySelector('.auth-btn.active');
 
     const forms = {
         'login': { show: loginForm, hide: registerForm, btnIndex: 1 },
@@ -17,7 +17,7 @@ function toggleFormDisplay(formToShow) {
     activeButton.classList.remove('active');
     forms[formToShow].show.style.display = "block";
     forms[formToShow].hide.style.display = "none";
-    document.querySelector(`.login__register-btn:nth-child(${forms[formToShow].btnIndex})`).classList.add('active');
+    document.querySelector(`.auth-btn:nth-child(${forms[formToShow].btnIndex})`).classList.add('active');
 }
 
 function formatDate(event) {
@@ -36,6 +36,13 @@ document.addEventListener('DOMContentLoaded', async function () {
         event.preventDefault();
 
         const form = document.getElementById('registerForm');
+
+        if (!isFormFilled(form)) {
+            registerButton.disabled = false;
+            displayToast('Please fill in all fields', 'error');
+            return;
+        }
+
         const formData = new FormData(form);
 
         const allowedFields = ['firstName', 'lastName', 'dateOfBirth', 'email', 'username', 'password', 'passwordConfirm'];
@@ -55,18 +62,18 @@ document.addEventListener('DOMContentLoaded', async function () {
                 toggleFormDisplay('login');
                 form.reset();
             }
-
         } catch (error) {
             throw error;
         } finally {
             // to prevent users from mass clicking, I will implement a better solution later!
-            // Lodash as global api service
+            // Lodash as global service
             setTimeout(() => {
                 registerButton.disabled = false;
             }, 1000);
         }
     });
 });
+
 
 window.toggleFormDisplay = toggleFormDisplay;
 window.formatDate = formatDate;
