@@ -18,28 +18,28 @@
         </div>
 
         <div class="login__register-register-form">
-            <form onsubmit="formatDate(event)">
+            <form id="registerForm" onsubmit="formatDate(event)">
                 <div class="login__register-form-group">
-                    <input id="firstName" type="text" placeholder="First Name" required>
+                    <input name="firstName" type="text" placeholder="First Name" required>
                 </div>
                 <div class="login__register-form-group">
-                    <input id="lastName" type="text" placeholder="Last Name" required>
+                    <input name="lastName" type="text" placeholder="Last Name" required>
                 </div>
                 <div class="login__register-form-group">
-                    <input id="dateOfBirth" type="date" placeholder="Date of Birth" pattern="\d{2}/\d{2}/\d{4}"
+                    <input name="dateOfBirth" type="date" placeholder="Date of Birth" pattern="\d{2}/\d{2}/\d{4}"
                         required>
                 </div>
                 <div class="login__register-form-group">
-                    <input id="email" type="email" placeholder="Email" required>
+                    <input name="email" type="email" placeholder="Email" required>
                 </div>
                 <div class="login__register-form-group">
-                    <input id="username" type="text" placeholder="Username" required>
+                    <input name="username" type="text" placeholder="Username" required>
                 </div>
                 <div class="login__register-form-group">
-                    <input id="password" type="password" placeholder="Password" required>
+                    <input name="password" type="password" placeholder="Password" required>
                 </div>
                 <div class="login__register-form-group">
-                    <input id="passwordConfirm" type="password" placeholder="Confirm Password" required>
+                    <input name="passwordConfirm" type="password" placeholder="Confirm Password" required>
                 </div>
                 <button id="registerButton" class="login__register-form-btn">Register</button>
             </form>

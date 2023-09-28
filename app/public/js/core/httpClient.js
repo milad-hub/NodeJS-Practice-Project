@@ -11,11 +11,13 @@ class HttpClient {
                 body: JSON.stringify(data)
             });
 
+            const responseData = await response.json();
+
             if (!response.ok) {
-                throw new AppError(`HTTP error! status: ${response.status}`, response.status);
+                alert(responseData.message);
+                throw new AppError(responseData.message, response.status);
             }
 
-            const responseData = await response.json();
             return responseData;
         } catch (error) {
             throw new AppError(`Error: ${error.message}`, statusCode.internalServerError);

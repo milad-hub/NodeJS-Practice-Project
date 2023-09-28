@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 
 const saltRounds = 12;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const usernameRegex = /^[a-z0-9]{4,}$/;
+const usernameRegex = /^[a-zA-Z0-9]{4,}$/;
 
 const userSchema = new mongoose.Schema({
 
@@ -51,7 +51,7 @@ const userSchema = new mongoose.Schema({
             validator: function (value) {
                 return usernameRegex.test(value);
             },
-            message: 'Username must be at least 4 characters long and contain only lowercase letters and numbers'
+            message: 'Username must be at least 4 characters long and contain only letters and numbers'
         }
     },
     password: {
@@ -90,23 +90,14 @@ userSchema.virtual('fullName').get(function () {
     return `${this.firstName} ${this.lastName}`;
 });
 
-// this is just for testing pre method
-userSchema.pre('save', function (next) {
-    this.createdAt = new Date();
-    next();
-});
-
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) { return next(); }
-
     this.password = await bcrypt.hash(this.password, saltRounds);
     this.passwordConfirm = undefined;
-    next();
-});
 
-userSchema.pre('save', function (next) {
     this.username = this.username.toLowerCase();
     next();
+
 });
 
 ////////////////////////////////////////////////////////////////////////////

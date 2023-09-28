@@ -1,5 +1,5 @@
 const { User, UserStatsAggregateOptions, UserAgeAggregateOptions } = require('../../models/user');
-const { UserServices, UserApiServices } = require('../../services/user');
+const { UserServices } = require('../../services/user');
 const { CommonServices } = require('../../services/common');
 const { sendResponse } = require('../../helpers/handlers/response');
 const { handleAsyncErrors, handleUserNotExistsError } = require('../../helpers/handlers/error');
@@ -37,7 +37,10 @@ class UserController {
         const validData = data.filter((obj) => this._commonServices.checkSchemaMatch(User.schema, obj, next));
 
         if (validData.length > 0) {
-            await User.insertMany(validData);
+            for (const doc of validData) {
+                const user = new User(doc);
+                await user.save();
+            }
         }
 
         sendResponse(res, statusCode.created);

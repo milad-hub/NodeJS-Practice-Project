@@ -1,4 +1,5 @@
 import UserServices from '../../../public/js/services/user.js';
+import { extractFormData, validatePassword } from '../../../public/js/shared/common.js';
 
 const _userServices = new UserServices();
 
@@ -32,33 +33,26 @@ document.addEventListener('DOMContentLoaded', async function () {
     registerButton.addEventListener('click', async function (event) {
         event.preventDefault();
 
-        const firstName = document.getElementById('firstName').value;
-        const lastName = document.getElementById('lastName').value;
-        const dateOfBirth = document.getElementById('dateOfBirth').value;
-        const email = document.getElementById('email').value;
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        const passwordConfirm = document.getElementById('passwordConfirm').value;
+        const form = document.getElementById('registerForm');
+        const formData = new FormData(form);
 
-        if (password !== passwordConfirm) {
+        const allowedFields = ['firstName', 'lastName', 'dateOfBirth', 'email', 'username', 'password', 'passwordConfirm'];
+
+        const userData = extractFormData(formData, allowedFields);
+
+        if (!validatePassword(userData.password, userData.passwordConfirm)) {
             alert('Passwords do not match. Please try again.');
             return;
         }
+        const response = await _userServices.createUser(userData);
+        if (response) {
+            alert('Registered Successfully');
+            toggleFormDisplay('login');
+        }
 
-        const userData = {
-            firstName: firstName,
-            lastName: lastName,
-            dateOfBirth: dateOfBirth,
-            email: email,
-            username: username,
-            password: password,
-            passwordConfirm: passwordConfirm
-        };
-
-        await _userServices.createUser(userData);
-        toggleFormDisplay('login');
     });
 });
+
 
 window.toggleFormDisplay = toggleFormDisplay;
 window.formatDate = formatDate;
