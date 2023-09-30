@@ -1,6 +1,6 @@
 import AuthServices from '../../../public/js/services/auth.js';
 import displayToast from '../../../public/js/shared/toast.js';
-import { extractFormData, validatePassword, isFormFilled } from '../../../public/js/shared/common.js';
+import { extractFormData, validatePassword, isRequiredFieldsFilled } from '../../../public/js/shared/common.js';
 
 const _authServices = new AuthServices();
 
@@ -37,9 +37,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         const form = document.getElementById('registerForm');
 
-        if (!isFormFilled(form)) {
+        if (!isRequiredFieldsFilled(form)) {
             registerButton.disabled = false;
-            displayToast('Please fill in all fields', 'error');
+            displayToast('Please fill in all required fields', 'error');
             return;
         }
 

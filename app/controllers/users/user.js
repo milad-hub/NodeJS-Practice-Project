@@ -13,7 +13,6 @@ class UserController {
 
         this.getUsersList = handleAsyncErrors(this.getUsersList.bind(this));
         this.getUser = handleAsyncErrors(this.getUser.bind(this));
-        this.createUser = handleAsyncErrors(this.createUser.bind(this));
         this.updateUser = handleAsyncErrors(this.updateUser.bind(this));
         this.deleteUser = handleAsyncErrors(this.deleteUser.bind(this));
     }
@@ -30,22 +29,6 @@ class UserController {
 
         sendResponse(res, statusCode.ok, user);
     }
-
-    async createUser(req, res, next) {
-        const data = Array.isArray(req.body) ? [...req.body] : [req.body];
-
-        const validData = data.filter((obj) => this._commonServices.checkSchemaMatch(User.schema, obj, next));
-
-        if (validData.length > 0) {
-            for (const doc of validData) {
-                const user = new User(doc);
-                await user.save();
-            }
-        }
-
-        sendResponse(res, statusCode.created);
-    }
-
 
     async updateUser(req, res, next) {
         const updatedUser = await User.findByIdAndUpdate(

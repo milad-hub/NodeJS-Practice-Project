@@ -12,7 +12,7 @@ function validatePassword(password, passwordConfirm) {
     return password === passwordConfirm;
 }
 
-function isFormFilled(form) {
+function isRequiredFieldsFilled(form) {
     const inputs = form.querySelectorAll('input[required]');
     for (const input of inputs) {
         if (!input.value.trim()) {
@@ -26,5 +26,5 @@ function isFormFilled(form) {
 export {
     extractFormData,
     validatePassword,
-    isFormFilled
+    isRequiredFieldsFilled
 };

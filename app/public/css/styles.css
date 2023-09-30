@@ -35,6 +35,7 @@ tr.blue-background th {
   transition: opacity 0.3s ease-in-out;
 }
 
+
 .display__toast.show {
   opacity: 1;
 }
@@ -47,15 +48,15 @@ tr.blue-background th {
   padding: 10px;
   margin: 10px 0;
   border-radius: 5px;
-  background-color: #fcfcfc;
+  color: white;
 }
 
 .message.success {
-  color: green;
+  background-color: #0F969C;
 }
 
 .message.error {
-  color: red;
+  background-color: #AE445A;
 }
 
 /* Auth Page Styles */

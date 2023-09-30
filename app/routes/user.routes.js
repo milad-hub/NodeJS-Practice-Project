@@ -18,7 +18,6 @@ router
 router
     .get('/', userController.getUsersList)
     .get('/:id', userController.getUser)
-    .post('/', userController.createUser)
     .patch('/:id', userController.updateUser)
     .delete('/:id', userController.deleteUser);
 
