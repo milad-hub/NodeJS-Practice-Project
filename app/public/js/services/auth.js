@@ -7,9 +7,17 @@ class AuthServices {
         this.httpClient = new HttpClient();
     }
 
+    async loginUser(userData) {
+        try {
+            return await this.httpClient.request('auth/login', httpMethods.POST, httpHeaders.content.json, userData);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async registerUser(userData) {
         try {
-            return await this.httpClient.request('auth', httpMethods.POST, httpHeaders.content.json, userData);
+            return await this.httpClient.request('auth/register', httpMethods.POST, httpHeaders.content.json, userData);
         } catch (error) {
             throw error;
         }

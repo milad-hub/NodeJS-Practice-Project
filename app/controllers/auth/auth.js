@@ -2,11 +2,23 @@ const { User } = require('../../models/user');
 const { sendResponse } = require('../../helpers/handlers/response');
 const { handleAsyncErrors } = require('../../helpers/handlers/error');
 const { statusCode } = require('../../config/config');
+const { authenticateUser } = require('../../services/auth');
 
 class AuthController {
 
     constructor() {
+        this.loginUser = handleAsyncErrors(this.loginUser.bind(this));
         this.registerUser = handleAsyncErrors(this.registerUser.bind(this));
+    }
+
+    async loginUser(req, res, next) {
+        const { username, password } = req.body;
+
+        const isUserAuthenticated = await authenticateUser(username, password);
+
+        if (isUserAuthenticated) {
+            sendResponse(res, statusCode.ok, '', 'User authenticated successfully');
+        }
     }
 
     async registerUser(req, res, next) {
@@ -17,11 +29,10 @@ class AuthController {
             await user.save();
         }
 
-        sendResponse(res, statusCode.created);
+        sendResponse(res, statusCode.created, '', 'User registered successfully');
     }
 }
 
 module.exports = {
     AuthController,
 };
-

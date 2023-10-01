@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
-const saltRounds = 12;
+const saltRounds = bcrypt.genSaltSync(12);
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const usernameRegex = /^[a-zA-Z0-9]{4,}$/;
 
@@ -98,6 +98,10 @@ userSchema.pre('save', async function (next) {
     this.passwordConfirm = undefined;
     next();
 });
+
+userSchema.methods.comparePassword = async function (userPassword, candidatePassword) {
+    return await bcrypt.compare(userPassword, candidatePassword);
+};
 
 ////////////////////////////////////////////////////////////////////////////
 

@@ -30,6 +30,44 @@ function formatDate(event) {
 }
 
 document.addEventListener('DOMContentLoaded', async function () {
+    const loginButton = document.getElementById('loginButton');
+    loginButton.addEventListener('click', async function (event) {
+        loginButton.disabled = true;
+        event.preventDefault();
+
+        const form = document.getElementById('loginForm');
+
+        if (!isRequiredFieldsFilled(form)) {
+            loginButton.disabled = false;
+            displayToast('Please enter username and password!', 'error');
+            return;
+        }
+
+        const formData = new FormData(form);
+
+        const allowedFields = ['username', 'password'];
+
+        const userData = extractFormData(formData, allowedFields);
+
+        try {
+            const response = await _authServices.loginUser(userData);
+            if (response) {
+                displayToast(response.message, 'success');
+                form.reset();
+                window.location.href = './users';
+            }
+        } catch (error) {
+            throw error;
+        } finally {
+            // to prevent users from mass clicking, I will implement a better solution later!
+            setTimeout(() => {
+                loginButton.disabled = false;
+            }, 1000);
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', async function () {
     const registerButton = document.getElementById('registerButton');
     registerButton.addEventListener('click', async function (event) {
         registerButton.disabled = true;
@@ -58,7 +96,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         try {
             const response = await _authServices.registerUser(userData);
             if (response) {
-                displayToast('Registered Successfully', 'success');
+                console.log(response);
+                displayToast(response.message, 'success');
                 toggleFormDisplay('login');
                 form.reset();
             }
@@ -66,7 +105,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             throw error;
         } finally {
             // to prevent users from mass clicking, I will implement a better solution later!
-            // Lodash as global service
             setTimeout(() => {
                 registerButton.disabled = false;
             }, 1000);

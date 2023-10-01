@@ -1,6 +1,6 @@
 require('dotenv').config({ path: './config.env' });
 const mongoose = require('mongoose');
-const isDevEnvironment = require('../helpers/enviroment');
+const { isDevEnvironment } = require('../helpers/common');
 
 module.exports = async () => {
     try {

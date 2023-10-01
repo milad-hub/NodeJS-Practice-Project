@@ -6,14 +6,14 @@
             <div class="auth-btn" onclick="toggleFormDisplay('register')">Register</div>
         </div>
         <div class="auth-login-form auth-active-form">
-            <form>
+            <form id="loginForm">
                 <div class="auth-form-group">
-                    <input type="text" placeholder="Username" required>
+                    <input type="text" name="username" placeholder="Username" required>
                 </div>
                 <div class="auth-form-group">
-                    <input type="password" placeholder="Password" required>
+                    <input type="password" name="password" placeholder="Password" required>
                 </div>
-                <button class="auth-form-btn">Login</button>
+                <button id="loginButton" class="auth-form-btn">Login</button>
             </form>
         </div>
 
