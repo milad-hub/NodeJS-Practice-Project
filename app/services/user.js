@@ -2,6 +2,7 @@ const { User } = require('../models/user');
 const { CommonServices } = require('../services/common');
 const { handlePaginationError } = require('../helpers/handlers/error');
 const { sendResponse } = require('../helpers/handlers/response');
+const { statusCode } = require('../config/config');
 
 class UserServices {
 
@@ -9,7 +10,7 @@ class UserServices {
         this._commonServices = new CommonServices();
     }
 
-    async filterUser(req, res, next) {
+    async filterUser(req, res) {
 
         if (this._commonServices.isEmptyObject(req.query)) {
             return UserServices.getUsersList(req.query, res);
@@ -24,7 +25,7 @@ class UserServices {
         const totalRecords = await User.countDocuments(filteredQuery);
 
         if (skipValue >= totalRecords) {
-            return handlePaginationError(next);
+            return handlePaginationError();
         }
 
         const result = await User.find(filteredQuery)

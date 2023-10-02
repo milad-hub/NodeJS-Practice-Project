@@ -17,7 +17,7 @@ class AuthController {
         const isUserAuthenticated = await authenticateUser(username, password);
 
         if (isUserAuthenticated) {
-            sendResponse(res, statusCode.ok, '', 'User authenticated successfully');
+            sendResponse(res, statusCode.ok, '', 'Logged in successfully');
         }
     }
 
@@ -29,7 +29,7 @@ class AuthController {
             await user.save();
         }
 
-        sendResponse(res, statusCode.created, '', 'User registered successfully');
+        sendResponse(res, statusCode.created, '', 'Registered successfully');
     }
 }
 

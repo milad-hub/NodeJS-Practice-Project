@@ -16,30 +16,30 @@ class CommonServices {
 
         for (const key in model) {
             if (!validKeys.includes(key)) {
-                return handleInternalServerError(next);
+                return handleInternalServerError();
             }
 
             const value = model[key];
             const { instance: type, isRequired: required } = schema.paths[key];
 
             if (required && (value === undefined || value === null)) {
-                return handleInternalServerError(next);
+                return handleInternalServerError();
             }
 
             switch (type) {
                 case 'String':
                     if (typeof value !== 'string') {
-                        return handleInternalServerError(next);
+                        return handleInternalServerError();
                     }
                     break;
                 case 'Number':
                     if (typeof value !== 'number' || !this.isNumeric(value)) {
-                        return handleInternalServerError(next);
+                        return handleInternalServerError();
                     }
                     break;
                 case 'Boolean':
                     if (typeof value !== 'boolean') {
-                        return handleInternalServerError(next);
+                        return handleInternalServerError();
                     }
                     break;
                 default:

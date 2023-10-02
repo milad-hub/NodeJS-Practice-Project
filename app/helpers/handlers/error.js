@@ -12,54 +12,54 @@ class AppError extends Error {
 
 const handleDbErrors = (err, req, res, next) => {
 
-    handleDbCastErrors(err, next);
+    handleDbCastErrors(err);
 
-    handleDbValidationErrors(err, next);
+    handleDbValidationErrors(err);
 
-    handleDbDuplicateFieldError(err, next);
+    handleDbDuplicateFieldError(err);
 
     isDevEnviroment ? next(err) : next(new AppError('Something went wrong', statusCode.internalServerError));
 };
 
-const handleDbCastErrors = (err, next) => {
+const handleDbCastErrors = (err) => {
     if (err.name === 'CastError') {
-        return next(new AppError(`Invalid ${err.path}:  ${err.value}`, statusCode.badRequest));
+        throw new AppError(`Invalid ${err.path}:  ${err.value}`, statusCode.badRequest);
     }
 };
 
-const handleDbValidationErrors = (err, next) => {
+const handleDbValidationErrors = (err) => {
     if (err.name === 'ValidationError') {
         const fields = Object.values(err.errors).map(el => el.message);
 
-        return next(new AppError(`Invalid input data: ${fields.join(', ')}`, statusCode.badRequest));
+        throw new AppError(`Invalid input data: ${fields.join(', ')}`, statusCode.badRequest);
     }
 };
 
-const handleDbDuplicateFieldError = (err, next) => {
+const handleDbDuplicateFieldError = (err) => {
     if (err.code === 11000) {
         const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0].replace(/["']/g, '');
 
-        return next(new AppError(`Duplicate field value entered: ${value}`, statusCode.badRequest));
+        throw new AppError(`Duplicate field value entered: ${value}`, statusCode.badRequest);
     }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
-const handleInternalServerError = (next) => {
-    return next(new AppError('Internal server error', statusCode.internalServerError));
+const handleInternalServerError = () => {
+    throw new AppError('Internal server error', statusCode.internalServerError);
 };
 
-const handleBadRequestError = (next) => {
-    return next(new AppError('Bad request', statusCode.badRequest));
+const handleBadRequestError = () => {
+    throw new AppError('Bad request', statusCode.badRequest);
 };
 
-const handlePaginationError = (next) => {
-    return next(new AppError('Page not found', statusCode.notFound));
+const handlePaginationError = () => {
+    throw new AppError('Page not found', statusCode.notFound);
 };
 
-const handleUserNotExistsError = (user, next) => {
+const handleUserNotExistsError = (user) => {
     if (!user) {
-        return next(new AppError('User not found', statusCode.notFound));
+        throw new AppError('User not found', statusCode.notFound);
     }
 };
 

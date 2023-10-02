@@ -18,14 +18,14 @@ class UserController {
     }
 
     async getUsersList(req, res, next) {
-        await this._userServices.filterUser(req, res, next);
+        await this._userServices.filterUser(req, res);
     };
 
     async getUser(req, res, next) {
         const { id } = req.params;
         const user = await User.findById(id).select('-_id -__v');
 
-        handleUserNotExistsError(user, next);
+        handleUserNotExistsError(user);
 
         sendResponse(res, statusCode.ok, user);
     }
@@ -39,16 +39,16 @@ class UserController {
                 runValidators: true,
             }
         );
-        handleUserNotExistsError(updatedUser, next);
+        handleUserNotExistsError(updatedUser);
 
         sendResponse(res, statusCode.ok, updatedUser);
     };
 
     async deleteUser(req, res, next) {
         const deletedUser = await User.findByIdAndDelete(req.params.id);
-        handleUserNotExistsError(deletedUser, next);
+        handleUserNotExistsError(deletedUser);
 
-        sendResponse(res, statusCode.ok, deletedUser);
+        sendResponse(res, statusCode.ok, '', 'User deleted successfully');
     };
 }
 
