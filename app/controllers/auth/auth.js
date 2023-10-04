@@ -14,10 +14,11 @@ class AuthController {
     async loginUser(req, res, next) {
         const { username, password } = req.body;
 
-        const isUserAuthenticated = await authenticateUser(username, password);
+        const token = await authenticateUser(username, password);
 
-        if (isUserAuthenticated) {
-            sendResponse(res, statusCode.ok, '', 'Logged in successfully');
+        if (token) {
+            res.cookie('token', token, { httpOnly: true });
+            sendResponse(res, statusCode.ok, token, 'Logged in successfully');
         }
     }
 

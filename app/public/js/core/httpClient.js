@@ -8,7 +8,10 @@ class HttpClient {
         try {
             const response = await fetch(`${baseApiUrl}/${endpoint}`, {
                 method: method,
-                headers: header,
+                headers: {
+                    ...header,
+                    credentials: 'include'
+                },
                 body: JSON.stringify(data)
             });
 

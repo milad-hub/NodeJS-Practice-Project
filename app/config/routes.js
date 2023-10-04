@@ -4,6 +4,7 @@ const { globalErrorHandler, routeNotFoundHandler } = require('../middlewares/err
 const { handleDbErrors } = require('../helpers/handlers/error');
 const { isDevEnvironment } = require('../helpers/common');
 const addRequestTime = require('../middlewares/request-time.spec');
+const authGuard = require('../middlewares/auth.middleware');
 const webTemplate = require('../routes/template.routes');
 const auth = require('../routes/auth.routes');
 const user = require('../routes/user.routes');
@@ -21,9 +22,12 @@ module.exports = (app) => {
         .use(express.static(path.join(__dirname, '../')));
 
     app
-        .use('/web', webTemplate)
-        .use('/api/auth', auth)
-        .use('/api/user', user);
+        .use('/auth', auth);
+
+
+    app
+        .use('/web', authGuard, webTemplate)
+        .use('/api/user', authGuard, user);
 
     app
         .all('*', routeNotFoundHandler)

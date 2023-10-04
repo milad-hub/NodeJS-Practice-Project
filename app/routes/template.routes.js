@@ -5,10 +5,8 @@ const webTemplateController = require('../controllers/web-template/web-template'
 
 router
     .get('/', webTemplateController.redirectToHomePage)
-    .get('/auth', webTemplateController.authPage)
     .get('/users', webTemplateController.listOfUsersPage)
     .get('/users/user-details', webTemplateController.getUserDetailsPage)
-    .get('/jsondb', webTemplateController.getJsonDb)
-    .get('*', webTemplateController.notFoundPage);
+    .get('/jsondb', webTemplateController.getJsonDb);
 
 module.exports = router;

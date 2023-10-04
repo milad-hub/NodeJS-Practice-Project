@@ -9,7 +9,17 @@ class AuthServices {
 
     async loginUser(userData) {
         try {
-            return await this.httpClient.request('auth/login', httpMethods.POST, httpHeaders.content.json, userData);
+            const response = await this.httpClient.request('auth/login', httpMethods.POST, httpHeaders.content.json, userData);
+
+            const token = response.token;
+            document.cookie = `token=${token}; path=/`;
+
+            // if (response.data) {
+            //     const token = 'Bearer ' + response.data;
+            //     localStorage.setItem('token', token);
+            // }
+
+            return response;
         } catch (error) {
             throw error;
         }
@@ -17,7 +27,8 @@ class AuthServices {
 
     async registerUser(userData) {
         try {
-            return await this.httpClient.request('auth/register', httpMethods.POST, httpHeaders.content.json, userData);
+            const response = await this.httpClient.request('auth/register', httpMethods.POST, httpHeaders.content.json, userData);
+            return response;
         } catch (error) {
             throw error;
         }

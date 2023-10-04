@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (response) {
                 displayToast(response.message, 'success');
                 form.reset();
-                window.location.href = './users';
+                window.location.href = './web/users';
             }
         } catch (error) {
             throw error;
@@ -96,7 +96,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         try {
             const response = await _authServices.registerUser(userData);
             if (response) {
-                console.log(response);
                 displayToast(response.message, 'success');
                 toggleFormDisplay('login');
                 form.reset();

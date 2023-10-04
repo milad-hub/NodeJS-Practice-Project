@@ -3,7 +3,7 @@ const { sendResponse } = require('../helpers/handlers/response');
 const { statusCode } = require('../config/config');
 
 const routeNotFoundHandler = (req, res, next) => {
-    throw new AppError(`Can't find ${req.originalUrl} on the server`, statusCode.notFound);
+    res.redirect('/auth/404');
 };
 
 const globalErrorHandler = (err, req, res, next) => {

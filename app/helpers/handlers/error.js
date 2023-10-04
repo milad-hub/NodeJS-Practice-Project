@@ -1,5 +1,5 @@
 const { statusCode } = require('../../config/config');
-const isDevEnviroment = require('../common');
+const { isDevEnvironment } = require('../common');
 
 class AppError extends Error {
     constructor(message, statusCode) {
@@ -18,7 +18,7 @@ const handleDbErrors = (err, req, res, next) => {
 
     handleDbDuplicateFieldError(err);
 
-    isDevEnviroment ? next(err) : next(new AppError('Something went wrong', statusCode.internalServerError));
+    isDevEnvironment ? next(err) : next(new AppError('Something went wrong', statusCode.internalServerError));
 };
 
 const handleDbCastErrors = (err) => {
