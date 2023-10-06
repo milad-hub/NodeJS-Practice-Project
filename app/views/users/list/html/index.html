@@ -1,5 +1,10 @@
 <div class="container">
-  <h1 class="mt-4">Users</h1>
+  <div class="d-flex justify-content-between mt-4">
+    <h1>Users</h1>
+    <div>
+      <button type="button" id="logoutButton" class="btn btn-danger"> Logout</button>
+    </div>
+  </div>
   <hr>
   <table class="mb-4">
     <thead>
@@ -21,4 +26,7 @@
   </table>
 
   {%USER_DETAILS%}
+
 </div>
+
+<script type="module" src="/views/users/list/js/list.js"></script>

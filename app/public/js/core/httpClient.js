@@ -3,18 +3,21 @@ import displayToast from '../shared/toast.js';
 import { baseApiUrl, statusCode } from '../shared/config.js';
 
 class HttpClient {
-
-    async request(endpoint, method, header, data) {
+    async request(endpoint, method, header, data = null) {
         try {
-            const response = await fetch(`${baseApiUrl}/${endpoint}`, {
+            const requestOptions = {
                 method: method,
                 headers: {
                     ...header,
                     credentials: 'include'
                 },
-                body: JSON.stringify(data)
-            });
+            };
 
+            if (data) {
+                requestOptions.body = JSON.stringify(data);
+            }
+
+            const response = await fetch(`${baseApiUrl}/${endpoint}`, requestOptions);
             const responseData = await response.json();
 
             if (!response.ok) {

@@ -9,6 +9,7 @@ class AuthController {
     constructor() {
         this.loginUser = handleAsyncErrors(this.loginUser.bind(this));
         this.registerUser = handleAsyncErrors(this.registerUser.bind(this));
+        this.logoutUser = handleAsyncErrors(this.logoutUser.bind(this));
     }
 
     async loginUser(req, res, next) {
@@ -18,7 +19,7 @@ class AuthController {
 
         if (token) {
             res.cookie('token', token, { httpOnly: true });
-            sendResponse(res, statusCode.ok, token, 'Logged in successfully');
+            sendResponse(res, statusCode.ok, '', 'Logged in successfully');
         }
     }
 
@@ -32,6 +33,13 @@ class AuthController {
 
         sendResponse(res, statusCode.created, '', 'Registered successfully');
     }
+
+    async logoutUser(req, res, next) {
+        res.clearCookie('token', { httpOnly: true });
+
+        sendResponse(res, statusCode.ok, null, 'Logged out successfully');
+    }
+
 }
 
 module.exports = {

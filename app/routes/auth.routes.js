@@ -10,6 +10,7 @@ router
     .get('/', webTemplateController.authPage)
     .get('/404', webTemplateController.notFoundPage)
     .post('/login', authController.loginUser)
-    .post('/register', authController.registerUser);
+    .post('/register', authController.registerUser)
+    .get('/logout', authController.logoutUser);
 
 module.exports = router;

@@ -4,9 +4,9 @@ const templates = {
     index: fs.readFileSync(`${__dirname}/../index.html`, 'utf-8'),
     notFound: fs.readFileSync(`${__dirname}/../views/shared/not-found.html`, 'utf-8'),
     users: {
-        index: fs.readFileSync(`${__dirname}/../views/users/list/index.html`, 'utf-8'),
-        table: fs.readFileSync(`${__dirname}/../views/users/list/table.html`, 'utf-8'),
-        userDetails: fs.readFileSync(`${__dirname}/../views/users/list/user-details.html`, 'utf-8'),
+        index: fs.readFileSync(`${__dirname}/../views/users/list/html/index.html`, 'utf-8'),
+        table: fs.readFileSync(`${__dirname}/../views/users/list/html/table.html`, 'utf-8'),
+        userDetails: fs.readFileSync(`${__dirname}/../views/users/list/html/user-details.html`, 'utf-8'),
     },
     userDetails: fs.readFileSync(`${__dirname}/../views/users/details/index.html`, 'utf-8'),
     auth: fs.readFileSync(`${__dirname}/../views/auth/html/index.html`, 'utf-8')
