@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             const response = await _authServices.logoutUser();
             if (response) {
                 displayToast(response.message, 'success');
-                window.location.href = '/auth';
             }
         } catch (error) {
             throw error;

@@ -36,8 +36,7 @@ class AuthController {
 
     async logoutUser(req, res, next) {
         res.clearCookie('token', { httpOnly: true });
-
-        sendResponse(res, statusCode.ok, null, 'Logged out successfully');
+        res.redirect('/auth');
     }
 
 }

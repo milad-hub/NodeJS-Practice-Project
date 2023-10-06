@@ -18,6 +18,12 @@ class HttpClient {
             }
 
             const response = await fetch(`${baseApiUrl}/${endpoint}`, requestOptions);
+
+            if (response.redirected && response.url) {
+                window.location.href = response.url;
+                return;
+            }
+
             const responseData = await response.json();
 
             if (!response.ok) {
