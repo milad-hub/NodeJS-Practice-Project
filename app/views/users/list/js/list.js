@@ -11,10 +11,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         event.preventDefault();
 
         try {
-            const response = await _authServices.logoutUser();
-            if (response) {
-                displayToast(response.message, 'success');
-            }
+            return await _authServices.logoutUser();
         } catch (error) {
             throw error;
         } finally {
