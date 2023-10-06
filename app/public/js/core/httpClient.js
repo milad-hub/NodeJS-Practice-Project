@@ -28,7 +28,6 @@ class HttpClient {
 
             if (!response.ok) {
                 displayToast(responseData.message, 'error');
-                throw new AppError(responseData.message, response.status);
             }
 
             return responseData;
