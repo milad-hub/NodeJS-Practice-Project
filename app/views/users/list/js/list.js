@@ -1,5 +1,4 @@
 import AuthServices from '/public/js/services/auth.js';
-import displayToast from '/public/js/shared/toast.js';
 
 const _authServices = new AuthServices();
 
