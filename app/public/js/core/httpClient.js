@@ -26,9 +26,8 @@ class HttpClient {
 
             const responseData = await response.json();
 
-            if (!response.ok) {
-                displayToast(responseData.message, 'error');
-            }
+            const toastType = response.ok ? 'success' : 'error';
+            displayToast(responseData.message, toastType);
 
             return responseData;
         } catch (error) {

@@ -2,7 +2,8 @@ const { User } = require('../../models/user');
 const { sendResponse } = require('../../helpers/handlers/response');
 const { handleAsyncErrors } = require('../../helpers/handlers/error');
 const { statusCode } = require('../../config/config');
-const { authenticateUser } = require('../../services/auth');
+const { authenticateUser, getUserIdByUsername, decryptToken, encryptToken } = require('../../services/auth');
+const { storeToken, revokeToken } = require('../../services/token');
 
 class AuthController {
 
@@ -15,11 +16,15 @@ class AuthController {
     async loginUser(req, res, next) {
         const { username, password } = req.body;
 
-        const token = await authenticateUser(username, password);
+        const token = await authenticateUser(username, password, next);
 
         if (token) {
-            res.cookie('token', token, { httpOnly: true });
-            sendResponse(res, statusCode.ok, '', 'Logged in successfully');
+            const userId = await getUserIdByUsername(username, next);
+            await storeToken(userId, token);
+            const encryptedToken = encryptToken(token);
+
+            res.cookie('token', encryptedToken, { httpOnly: true });
+            res.redirect('/web/users');
         }
     }
 
@@ -35,9 +40,17 @@ class AuthController {
     }
 
     async logoutUser(req, res, next) {
+        const token = req.cookies.token;
+
+        if (token) {
+            const decryptedToken = decryptToken(token);
+            await revokeToken(decryptedToken);
+        }
+
         res.clearCookie('token', { httpOnly: true });
         res.redirect('/auth');
     }
+
 
 }
 

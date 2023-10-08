@@ -50,12 +50,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const userData = extractFormData(formData, allowedFields);
 
         try {
-            const response = await _authServices.loginUser(userData);
-            if (response) {
-                displayToast(response.message, 'success');
-                form.reset();
-                window.location.href = './web/users';
-            }
+            await _authServices.loginUser(userData);
         } catch (error) {
             throw error;
         } finally {

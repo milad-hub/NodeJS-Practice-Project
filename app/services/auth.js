@@ -5,29 +5,31 @@ const { AppError } = require('../helpers/handlers/error');
 const { statusCode } = require('../config/config');
 const { jwtSecretKey, cyptoSecretKey } = require('../config/auth');
 
-const authenticateUser = async (username, password) => {
+const authenticateUser = async (username, password, next) => {
 
     if (!username || !password) {
-        throw new AppError('Username and password are required.', statusCode.badRequest);
+        return next(new AppError('Username and password are required.', statusCode.badRequest));
     }
 
-    const user = await User.findOne({ username }).select('+password');
+    const user = await User.findOne({ username }).select('_id, +password, isActive');
 
     if (!user) {
-        throw new AppError('Invalid username and password', statusCode.unauthorized);
+        return next(new AppError('Invalid username and password', statusCode.unauthorized));
     }
 
     const isPasswordValid = await user.comparePassword(password, user.password);
 
     if (!isPasswordValid) {
-        throw new AppError('Invalid username and password', statusCode.unauthorized);
+        return next(new AppError('Invalid username and password', statusCode.unauthorized));
+    }
+
+    if (!user.isActive) {
+        return next(new AppError('User is not activated', statusCode.unauthorized));
     }
 
     const signedToken = signToken(user._id);
 
-    const encrptedToken = encryptToken(signedToken);
-
-    return encrptedToken;
+    return signedToken;
 };
 
 const signToken = (userId) => {
@@ -54,9 +56,35 @@ const decryptToken = (encryptedToken) => {
     return token;
 };
 
+const getUserIdByUsername = async (username, next) => {
+    const user = await User.findOne({ username });
+    if (!user) {
+        return next(new AppError('User not found', statusCode.notFound));
+    }
+    return user._id;
+};
+
+const isUserValid = (userId) => {
+    return User.exists({ _id: userId });
+};
+
+const isUserActive = async (userId) => {
+    const isValid = isUserValid(userId);
+    if (!isValid) {
+        return false;
+    }
+    const user = await User.findOne(userId).select('isActive');
+    return user.isActive;
+};
+
+
+
 module.exports = {
     authenticateUser,
     decodeToken,
     encryptToken,
-    decryptToken
+    decryptToken,
+    getUserIdByUsername,
+    isUserValid,
+    isUserActive
 };

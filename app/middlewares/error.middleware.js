@@ -1,4 +1,3 @@
-const { AppError } = require('../helpers/handlers/error');
 const { sendResponse } = require('../helpers/handlers/response');
 const { statusCode } = require('../config/config');
 
