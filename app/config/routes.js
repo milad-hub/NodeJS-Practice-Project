@@ -11,9 +11,9 @@ const user = require('../routes/user.routes');
 
 module.exports = (app) => {
 
-    if (isDevEnvironment) {
-        app.use('*', addRequestTime);
-    }
+    // if (isDevEnvironment) {
+    //     app.use('*', addRequestTime);
+    // }
 
     app
         .get('/', (req, res) => {

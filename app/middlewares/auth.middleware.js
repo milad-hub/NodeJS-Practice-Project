@@ -13,11 +13,7 @@ const authGuard = handleAsyncErrors(async (req, res, next) => {
         const user = decodeToken(token);
         const isValidatedUser = await isUserActive(user.id);
 
-        if (isValidatedUser) {
-            next();
-        }
-
-        return;
+        isValidatedUser ? next() : res.redirect('/auth');
 
     } catch (error) {
         res.redirect('/auth');

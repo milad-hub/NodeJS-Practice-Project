@@ -16,10 +16,10 @@ class AuthController {
     async loginUser(req, res, next) {
         const { username, password } = req.body;
 
-        const token = await authenticateUser(username, password, next);
+        const token = await authenticateUser(username, password);
 
         if (token) {
-            const userId = await getUserIdByUsername(username, next);
+            const userId = await getUserIdByUsername(username);
             await storeToken(userId, token);
             const encryptedToken = encryptToken(token);
 
