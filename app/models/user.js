@@ -5,6 +5,11 @@ const saltRounds = bcrypt.genSaltSync(12);
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const usernameRegex = /^[a-zA-Z0-9]{4,}$/;
 
+const role = {
+    admin: "admin",
+    user: "user"
+};
+
 const userSchema = new mongoose.Schema({
 
     id: {
@@ -43,6 +48,11 @@ const userSchema = new mongoose.Schema({
             },
             message: 'Invalid email format'
         }
+    },
+    role: {
+        type: String,
+        enum: Object.values(role),
+        default: role.user
     },
     username: {
         type: String,
@@ -163,6 +173,7 @@ const UserAgeAggregateOptions = (age) => [
 const User = mongoose.model('users', userSchema);
 
 module.exports = {
+    role,
     User,
     UserStatsAggregateOptions,
     UserAgeAggregateOptions

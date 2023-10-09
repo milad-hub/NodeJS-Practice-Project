@@ -90,8 +90,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         try {
             const response = await _authServices.registerUser(userData);
-            if (response) {
-                displayToast(response.message, 'success');
+            // TODO : handle responce status
+            if (response.ok) {
                 toggleFormDisplay('login');
                 form.reset();
             }

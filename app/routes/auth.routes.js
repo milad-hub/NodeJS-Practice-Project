@@ -8,6 +8,7 @@ const authController = new AuthController();
 
 router
     .get('/', webTemplateController.authPage)
+    .get('/403', webTemplateController.accessDeniedPage)
     .get('/404', webTemplateController.notFoundPage)
     .post('/login', authController.loginUser)
     .post('/register', authController.registerUser)

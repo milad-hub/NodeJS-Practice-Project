@@ -32,6 +32,9 @@ class AuthController {
         const userData = req.body;
 
         if (userData) {
+
+            if (userData.role) delete userData.role;
+
             const user = new User(userData);
             await user.save();
         }

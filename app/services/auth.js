@@ -11,7 +11,7 @@ const authenticateUser = async (username, password) => {
         throw new AppError('Username and password are required.', statusCode.badRequest);
     }
 
-    const user = await User.findOne({ username }).select('_id +password isActive');
+    const user = await User.findOne({ username }).select('_id role +password isActive');
 
     if (!user) {
         throw new AppError('Invalid username and password', statusCode.unauthorized);
@@ -27,13 +27,13 @@ const authenticateUser = async (username, password) => {
         throw new AppError('User is not activated', statusCode.unauthorized);
     }
 
-    const signedToken = signToken(user._id);
+    const signedToken = signToken(user._id, user.role);
 
     return signedToken;
 };
 
-const signToken = (userId) => {
-    const token = jwt.sign({ id: userId }, jwtSecretKey, {
+const signToken = (userId, userRole) => {
+    const token = jwt.sign({ id: userId, role: userRole }, jwtSecretKey, {
         expiresIn: 3600
     });
     return token;

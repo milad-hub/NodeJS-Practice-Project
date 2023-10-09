@@ -8,6 +8,7 @@ const authGuard = require('../middlewares/auth.middleware');
 const webTemplate = require('../routes/template.routes');
 const auth = require('../routes/auth.routes');
 const user = require('../routes/user.routes');
+const { role } = require('../models/user');
 
 module.exports = (app) => {
 
@@ -24,10 +25,9 @@ module.exports = (app) => {
     app
         .use('/auth', auth);
 
-
     app
-        .use('/web', authGuard, webTemplate)
-        .use('/api/user', authGuard, user);
+        .use('/web', authGuard([role.admin, role.user]), webTemplate)
+        .use('/api/user', authGuard([role.admin]), user);
 
     app
         .all('*', routeNotFoundHandler)

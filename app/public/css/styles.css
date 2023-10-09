@@ -193,9 +193,10 @@ tr.blue-background th {
   }
 }
 
-/* Not Found Page Styles */
+/* Not Found and Access Denied Page Styles */
 
-.not__found-body {
+.not__found-body,
+.access__denied-body {
   background-color: #f1f1f1;
   font-family: Arial, sans-serif;
   color: #333;
@@ -204,7 +205,8 @@ tr.blue-background th {
   padding: 0;
 }
 
-.not__found-container {
+.not__found-container,
+.access__denied-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -212,19 +214,22 @@ tr.blue-background th {
   height: 100vh;
 }
 
-.not__found-error--code {
+.not__found-error--code,
+.access__denied-error--code {
   font-size: 120px;
   font-weight: bold;
   margin: 0;
 }
 
-.not__found-error--message {
+.not__found-error--message,
+.access__denied-error--message {
   font-size: 24px;
   margin: 20px 0;
 }
 
 .user__details-home-link,
-.not__found-home-link {
+.not__found-home-link,
+.access__denied-home-link {
   display: inline-block;
   background-color: #3325ff;
   color: #fff;
@@ -236,6 +241,7 @@ tr.blue-background th {
 }
 
 .user__details-home-link:hover,
-.not__found-home-link:hover {
+.not__found-home-link:hover,
+.access__denied-home-link:hover {
   opacity: .9;
 }

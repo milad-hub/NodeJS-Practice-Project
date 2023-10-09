@@ -48,6 +48,11 @@ const webTemplateController = {
     notFoundPage: (req, res) => {
         const updatedIndex = replaceDefaultRoute(templates.index.replace(/{%TITLE%}/g, '404 Not Found'), templates.notFound);
         res.status(statusCode.notFound).end(updatedIndex);
+    },
+
+    accessDeniedPage: (req, res) => {
+        const updatedIndex = replaceDefaultRoute(templates.index.replace(/{%TITLE%}/g, 'Access Denied'), templates.accessDenied);
+        res.status(statusCode.forbidden).end(updatedIndex);
     }
 };
 

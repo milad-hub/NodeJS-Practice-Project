@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install project dependencies
-RUN npm install
+RUN npm install --force
 
 # Copy the rest of the application files to the working directory
 COPY . .
@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3000
 
 # Define the command to run your application
-CMD ["node", "app.js"]
+CMD ["node", "server.js"]

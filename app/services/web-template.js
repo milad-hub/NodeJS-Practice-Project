@@ -3,6 +3,7 @@ const fs = require('fs');
 const templates = {
     index: fs.readFileSync(`${__dirname}/../index.html`, 'utf-8'),
     notFound: fs.readFileSync(`${__dirname}/../views/shared/not-found.html`, 'utf-8'),
+    accessDenied: fs.readFileSync(`${__dirname}/../views/shared/access-denied.html`, 'utf-8'),
     users: {
         index: fs.readFileSync(`${__dirname}/../views/users/list/html/index.html`, 'utf-8'),
         table: fs.readFileSync(`${__dirname}/../views/users/list/html/table.html`, 'utf-8'),
