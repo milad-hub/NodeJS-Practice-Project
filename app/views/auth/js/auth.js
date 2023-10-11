@@ -1,5 +1,6 @@
 import AuthServices from '../../../public/js/services/auth.js';
 import displayToast from '../../../public/js/shared/toast.js';
+import { statusCode } from '../../../public/js/shared/config.js';
 import { extractFormData, validatePassword, isRequiredFieldsFilled } from '../../../public/js/shared/common.js';
 
 const _authServices = new AuthServices();
@@ -20,6 +21,36 @@ function toggleFormDisplay(formToShow) {
     document.querySelector(`.auth-btn:nth-child(${forms[formToShow].btnIndex})`).classList.add('active');
 }
 
+function toggleForgotPasswordForm() {
+    const formSelector = document.getElementById('formSelector');
+    const loginFormContainer = document.getElementById('loginFormContainer');
+    const forgotPasswordFormContainer = document.getElementById('forgotPasswordFormContainer');
+
+    formSelector.style.display = 'none';
+    loginFormContainer.style.display = 'none';
+    forgotPasswordFormContainer.style.display = 'block';
+}
+
+function toggleBackToLogin() {
+    const formSelector = document.getElementById('formSelector');
+    const loginFormContainer = document.getElementById('loginFormContainer');
+    const forgotPasswordFormContainer = document.getElementById('forgotPasswordFormContainer');
+
+    formSelector.style.display = '';
+    loginFormContainer.style.display = 'block';
+    forgotPasswordFormContainer.style.display = 'none';
+}
+
+function toggleResetPasswordForm() {
+    const formSelector = document.getElementById('formSelector');
+    const loginFormContainer = document.getElementById('loginFormContainer');
+    const resetPasswordFormContainer = document.getElementById('resetPasswordFormContainer');
+
+    formSelector.style.display = 'none';
+    loginFormContainer.style.display = 'none';
+    resetPasswordFormContainer.style.display = 'block';
+}
+
 function formatDate(event) {
     event.preventDefault();
     const dateOfBirthInput = document.getElementById('dateOfBirth');
@@ -29,21 +60,34 @@ function formatDate(event) {
     dateOfBirthInput.value = formattedDate;
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+    const regex = /^\/auth\/.{32,}$/;
+    const match = window.location.pathname.match(regex);
+
+    if (match && window.location.pathname !== '/auth') {
+        toggleResetPasswordForm();
+    }
+
+    if (!match && window.location.pathname !== '/auth') {
+        window.location.href = '/auth';
+    }
+});
+
 document.addEventListener('DOMContentLoaded', async function () {
     const loginButton = document.getElementById('loginButton');
     loginButton.addEventListener('click', async function (event) {
         loginButton.disabled = true;
         event.preventDefault();
 
-        const form = document.getElementById('loginForm');
+        const loginForm = document.getElementById('loginForm');
 
-        if (!isRequiredFieldsFilled(form)) {
+        if (!isRequiredFieldsFilled(loginForm)) {
             loginButton.disabled = false;
             displayToast('Please enter username and password!', 'error');
             return;
         }
 
-        const formData = new FormData(form);
+        const formData = new FormData(loginForm);
 
         const allowedFields = ['username', 'password'];
 
@@ -54,7 +98,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         } catch (error) {
             throw error;
         } finally {
-            // to prevent users from mass clicking, I will implement a better solution later!
             setTimeout(() => {
                 loginButton.disabled = false;
             }, 1000);
@@ -68,15 +111,15 @@ document.addEventListener('DOMContentLoaded', async function () {
         registerButton.disabled = true;
         event.preventDefault();
 
-        const form = document.getElementById('registerForm');
+        const registerForm = document.getElementById('registerForm');
 
-        if (!isRequiredFieldsFilled(form)) {
+        if (!isRequiredFieldsFilled(registerForm)) {
             registerButton.disabled = false;
             displayToast('Please fill in all required fields', 'error');
             return;
         }
 
-        const formData = new FormData(form);
+        const formData = new FormData(registerForm);
 
         const allowedFields = ['firstName', 'lastName', 'dateOfBirth', 'email', 'username', 'password', 'passwordConfirm'];
 
@@ -90,17 +133,102 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         try {
             const response = await _authServices.registerUser(userData);
-            // TODO : handle responce status
-            if (response.ok) {
+            if (response.status === statusCode.created) {
                 toggleFormDisplay('login');
-                form.reset();
+                registerForm.reset();
             }
         } catch (error) {
             throw error;
         } finally {
-            // to prevent users from mass clicking, I will implement a better solution later!
             setTimeout(() => {
                 registerButton.disabled = false;
+            }, 1000);
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', async function () {
+    const forgotPasswordButton = document.getElementById('forgotPasswordButton');
+    forgotPasswordButton.addEventListener('click', async function (event) {
+        forgotPasswordButton.disabled = true;
+        event.preventDefault();
+
+        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+
+        if (!isRequiredFieldsFilled(forgotPasswordForm)) {
+            forgotPasswordButton.disabled = false;
+            displayToast('Please enter your email', 'error');
+            return;
+        }
+
+        const formData = new FormData(forgotPasswordForm);
+
+        const allowedFields = ['email'];
+
+        const userData = extractFormData(formData, allowedFields);
+
+        try {
+            const response = await _authServices.forgotPassword(userData);
+            if (response.status === statusCode.ok) {
+                setTimeout(() => {
+                    toggleBackToLogin();
+                    forgotPasswordForm.reset();
+                }, 1000);
+            }
+
+        } catch (error) {
+            throw error;
+        } finally {
+            setTimeout(() => {
+                forgotPasswordButton.disabled = false;
+            }, 1000);
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', async function () {
+    const resetPasswordButton = document.getElementById('resetPasswordButton');
+    resetPasswordButton.addEventListener('click', async function (event) {
+        resetPasswordButton.disabled = true;
+        event.preventDefault();
+
+        const resetPasswordForm = document.getElementById('resetPasswordForm');
+
+        if (!isRequiredFieldsFilled(resetPasswordForm)) {
+            resetPasswordButton.disabled = false;
+            displayToast('Please fill in all required fields', 'error');
+            return;
+        }
+
+        const formData = new FormData(resetPasswordForm);
+
+        const allowedFields = ['password', 'passwordConfirm'];
+
+        const userData = extractFormData(formData, allowedFields);
+
+        const token = window.location.pathname.split('/auth/')[1];
+
+        userData.token = token;
+
+        if (!validatePassword(userData.password, userData.passwordConfirm)) {
+            resetPasswordButton.disabled = false;
+            displayToast('Passwords do not match. Please try again', 'error');
+            return;
+        }
+
+        try {
+            const response = await _authServices.resetPassword(userData);
+            if (response.status === statusCode.ok) {
+                setTimeout(() => {
+                    window.location.href = '/auth';
+                    resetPasswordForm.reset();
+                }, 1000);
+            }
+        } catch (error) {
+            throw error;
+        } finally {
+            setTimeout(() => {
+                resetPasswordButton.disabled = false;
             }, 1000);
         }
     });
@@ -109,3 +237,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 window.toggleFormDisplay = toggleFormDisplay;
 window.formatDate = formatDate;
+window.toggleForgotPasswordForm = toggleForgotPasswordForm;
+window.toggleBackToLogin = toggleBackToLogin;
+window.toggleResetPasswordForm = toggleResetPasswordForm;

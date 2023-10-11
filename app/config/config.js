@@ -16,6 +16,9 @@ const statusCode = {
     gatewayTimeout: 504
 };
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 module.exports = {
-    statusCode
+    statusCode,
+    emailRegex
 };

@@ -37,6 +37,24 @@ class AuthServices {
             throw error;
         }
     }
+
+    async forgotPassword(userData) {
+        try {
+            const response = await this.httpClient.request('auth/forgotPassword', httpMethods.POST, httpHeaders.content.json, userData);
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async resetPassword(userData) {
+        try {
+            const response = await this.httpClient.request('auth/resetPassword', httpMethods.POST, httpHeaders.content.json, userData);
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 export default AuthServices;

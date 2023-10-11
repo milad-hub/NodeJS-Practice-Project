@@ -17,16 +17,17 @@ class HttpClient {
                 requestOptions.body = JSON.stringify(data);
             }
 
-            const response = await fetch(`${baseApiUrl}/${endpoint}`, requestOptions);
+            const fetchData = await fetch(`${baseApiUrl}/${endpoint}`, requestOptions);
 
-            if (response.redirected && response.url) {
-                window.location.href = response.url;
+            if (fetchData.redirected && fetchData.url) {
+                window.location.href = fetchData.url;
                 return;
             }
 
-            const responseData = await response.json();
+            const responseData = await fetchData.json();
+            responseData.status = fetchData.status;
 
-            const toastType = response.ok ? 'success' : 'error';
+            const toastType = fetchData.ok ? 'success' : 'error';
             displayToast(responseData.message, toastType);
 
             return responseData;

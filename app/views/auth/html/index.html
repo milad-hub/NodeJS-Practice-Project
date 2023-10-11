@@ -1,11 +1,11 @@
 <body class="auth-body">
 
     <div class="auth-container">
-        <div class="auth-toggle-btn">
+        <div class="auth-toggle-btn" id="formSelector">
             <div class="auth-btn active" onclick="toggleFormDisplay('login')">Login</div>
             <div class="auth-btn" onclick="toggleFormDisplay('register')">Register</div>
         </div>
-        <div class="auth-login-form auth-active-form">
+        <div class="auth-login-form auth-active-form" id="loginFormContainer">
             <form id="loginForm">
                 <div class="auth-form-group">
                     <input type="text" name="username" placeholder="Username" required>
@@ -15,10 +15,42 @@
                 </div>
                 <button id="loginButton" class="auth-form-btn">Login</button>
             </form>
+            <div class="d-flex justify-content-end mt-4">
+                <a href="#" onclick="toggleForgotPasswordForm()" class="no-underline"> Forgot password?</a>
+            </div>
+        </div>
+
+        <div id="forgotPasswordFormContainer" class="display-none">
+            <strong>Forgot Password</strong>
+            <hr>
+            <form id="forgotPasswordForm" class="mt-4">
+                <div class="auth-form-group">
+                    <input name="email" type="email" placeholder="Email" required>
+                </div>
+                <button id="forgotPasswordButton" class="auth-form-btn">Reset Password</button>
+                <div class="d-flex justify-content-start mt-4">
+                    <a href="#" onclick="toggleBackToLogin()" class="no-underline">
+                        <i class="fa-solid fa-arrow-left"></i> Back</a>
+                </div>
+            </form>
+        </div>
+
+        <div id="resetPasswordFormContainer" class="display-none">
+            <strong>Reset Your Password</strong>
+            <hr>
+            <form id="resetPasswordForm" class="mt-4">
+                <div class="auth-form-group">
+                    <input name="password" type="password" placeholder="Password" required>
+                </div>
+                <div class="auth-form-group">
+                    <input name="passwordConfirm" type="password" placeholder="Confirm Password" required>
+                </div>
+                <button id="resetPasswordButton" class="auth-form-btn"> Submit</button>
+            </form>
         </div>
 
         <div class="auth-register-form">
-            <form id="registerForm" onsubmit="formatDate(event)">
+            <form id="registerFormContainer" onsubmit="formatDate(event)">
                 <div class="auth-form-group">
                     <input name="firstName" type="text" placeholder="First Name" required>
                 </div>

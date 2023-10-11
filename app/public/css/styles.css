@@ -24,6 +24,14 @@ tr.blue-background th {
   color: white;
 }
 
+.no-underline {
+  text-decoration: none;
+}
+
+.display-none {
+  display: none;
+}
+
 /* Display Toast */
 
 .display__toast {

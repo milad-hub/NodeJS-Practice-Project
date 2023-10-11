@@ -7,11 +7,13 @@ const webTemplateController = require('../controllers/web-template/web-template'
 const authController = new AuthController();
 
 router
-    .get('/', webTemplateController.authPage)
     .get('/403', webTemplateController.accessDeniedPage)
     .get('/404', webTemplateController.notFoundPage)
+    .get('/logout', authController.logoutUser)
+    .get('/*', webTemplateController.authPage)
     .post('/login', authController.loginUser)
     .post('/register', authController.registerUser)
-    .get('/logout', authController.logoutUser);
+    .post('/forgotPassword', authController.forgotPassword)
+    .post('/resetPassword', authController.resetPassword);
 
 module.exports = router;

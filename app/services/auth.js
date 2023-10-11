@@ -2,8 +2,10 @@ const jwt = require('jsonwebtoken');
 const CryptoJS = require('crypto-js');
 const { User } = require('../models/user');
 const { AppError } = require('../helpers/handlers/error');
+const sendMail = require('../helpers/sendMail');
 const { statusCode } = require('../config/config');
-const { jwtSecretKey, cyptoSecretKey } = require('../config/auth');
+const { jwtSecretKey, cryptoSecretKey, baseUrl } = require('../config/auth');
+const { resetPasswordEmailOptions } = require('../config/email');
 
 const authenticateUser = async (username, password) => {
 
@@ -32,6 +34,48 @@ const authenticateUser = async (username, password) => {
     return signedToken;
 };
 
+const forgotPassword = async (email) => {
+
+    const user = await getUserByEmail(email);
+    const resetToken = user.createPasswordResetToken();
+
+    await user.save({ validateBeforeSave: false });
+
+    const resetUrl = `${baseUrl}/auth/${resetToken}`;
+
+    const resetEmail = resetPasswordEmailOptions(user.firstName, resetUrl);
+
+    try {
+        await sendMail(user.email, resetEmail.subject, resetEmail.body);
+    } catch (error) {
+        user.passwordResetToken = undefined;
+        user.passwordResetExpires = undefined;
+
+        await user.save({ validateBeforeSave: false });
+
+        throw new AppError('Reset password email sending failed!', statusCode.internalServerError);
+    }
+};
+
+const resetPassword = async (token, password, passwordConfirm) => {
+    const user = await User.findOne({
+        passwordResetToken: token,
+        passwordResetExpires: { $gt: Date.now() }
+    });
+
+    if (!user) {
+        throw new AppError('Invalid token or token expired', statusCode.badRequest);
+    }
+
+    user.password = password;
+    user.passwordConfirm = passwordConfirm;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+
+    await user.save();
+};
+
+
 const signToken = (userId, userRole) => {
     const token = jwt.sign({ id: userId, role: userRole }, jwtSecretKey, {
         expiresIn: 3600
@@ -46,14 +90,20 @@ const decodeToken = (token) => {
 };
 
 const encryptToken = (signedToken) => {
-    const token = CryptoJS.AES.encrypt(JSON.stringify(signedToken), cyptoSecretKey).toString();
+    const token = CryptoJS.AES.encrypt(JSON.stringify(signedToken), cryptoSecretKey).toString();
     return token;
 };
 
 const decryptToken = (encryptedToken) => {
-    const bytes = CryptoJS.AES.decrypt(encryptedToken, cyptoSecretKey);
+    const bytes = CryptoJS.AES.decrypt(encryptedToken, cryptoSecretKey);
     const token = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
     return token;
+};
+
+const getUserByEmail = async (email) => {
+    const user = await User.findOne({ email });
+
+    return user;
 };
 
 const getUserIdByUsername = async (username) => {
@@ -83,6 +133,8 @@ const isUserActive = async (userId) => {
 
 module.exports = {
     authenticateUser,
+    forgotPassword,
+    resetPassword,
     decodeToken,
     encryptToken,
     decryptToken,
