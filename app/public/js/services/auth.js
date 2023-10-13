@@ -49,7 +49,7 @@ class AuthServices {
 
     async resetPassword(userData) {
         try {
-            const response = await this.httpClient.request('auth/resetPassword', httpMethods.POST, httpHeaders.content.json, userData);
+            const response = await this.httpClient.request('auth/resetPassword', httpMethods.PATCH, httpHeaders.content.json, userData);
             return response;
         } catch (error) {
             throw error;

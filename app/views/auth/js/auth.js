@@ -61,7 +61,7 @@ function formatDate(event) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    const regex = /^\/auth\/.{32,}$/;
+    const regex = /^\/auth\/.{127,}$/;
     const match = window.location.pathname.match(regex);
 
     if (match && window.location.pathname !== '/auth') {

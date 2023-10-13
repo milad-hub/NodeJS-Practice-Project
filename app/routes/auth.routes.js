@@ -14,6 +14,6 @@ router
     .post('/login', authController.loginUser)
     .post('/register', authController.registerUser)
     .post('/forgotPassword', authController.forgotPassword)
-    .post('/resetPassword', authController.resetPassword);
+    .patch('/resetPassword', authController.resetPassword);
 
 module.exports = router;
