@@ -31,21 +31,29 @@ class UserController {
     }
 
     async updateUser(req, res, next) {
-        const updatedUser = await User.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            {
-                new: true,
-                runValidators: true,
-            }
-        );
+
+        const { id } = req.params;
+        const userData = req.body;
+
+        const allowedFields = ['firstName', 'lastName', 'dateOfBirth', 'email'];
+        const user = this._commonServices.extractAllowedFields(userData, allowedFields);
+
+        const updatedUser = await User.findByIdAndUpdate(id, user, {
+            new: true,
+            runValidators: true,
+        });
+
         handleUserNotExistsError(updatedUser);
 
         sendResponse(res, statusCode.ok, updatedUser);
     };
 
     async deleteUser(req, res, next) {
-        const deletedUser = await User.findByIdAndDelete(req.params.id);
+
+        const { id } = req.params;
+
+        const deletedUser = await User.findByIdAndDelete(id);
+
         handleUserNotExistsError(deletedUser);
 
         sendResponse(res, statusCode.ok, '', 'User deleted successfully');

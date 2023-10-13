@@ -168,17 +168,18 @@ document.addEventListener('DOMContentLoaded', async function () {
         const userData = extractFormData(formData, allowedFields);
 
         try {
+            forgotPasswordButton.disabled = true;
+            forgotPasswordButton.textContent = 'Please Wait...';
             const response = await _authServices.forgotPassword(userData);
             if (response.status === statusCode.ok) {
-                setTimeout(() => {
-                    toggleBackToLogin();
-                    forgotPasswordForm.reset();
-                }, 1000);
+                toggleBackToLogin();
+                forgotPasswordForm.reset();
             }
 
         } catch (error) {
             throw error;
         } finally {
+            forgotPasswordButton.textContent = 'Reset Password';
             setTimeout(() => {
                 forgotPasswordButton.disabled = false;
             }, 1000);

@@ -3,7 +3,7 @@ const { sendResponse } = require('../../helpers/handlers/response');
 const { handleAsyncErrors, AppError } = require('../../helpers/handlers/error');
 const { statusCode, emailRegex } = require('../../config/config');
 const { storeToken, revokeToken } = require('../../services/token');
-const { authenticateUser, getUserIdByUsername, decryptToken, encryptToken, forgotPassword, resetPassword } = require('../../services/auth');
+const { authenticateUser, getUserIdByUsername, decryptToken, encryptToken, sendPasswordResetEmail, modifyPassword } = require('../../services/auth');
 
 class AuthController {
 
@@ -64,19 +64,15 @@ class AuthController {
             throw new AppError('Invalid email format!', statusCode.badRequest);
         }
 
-        const isPasswordResetEmailSent = forgotPassword(email);
-        if (isPasswordResetEmailSent) {
-            sendResponse(res, statusCode.ok, '', 'The reset password email sent successfully');
-        } else {
-            throw new AppError('The email field is required', statusCode.badRequest);
-        }
+        sendPasswordResetEmail(email);
+        sendResponse(res, statusCode.ok, '', 'The reset password email sent successfully');
     }
 
     async resetPassword(req, res, next) {
         const { token, password, passwordConfirm } = req.body;
 
         if (token && password && passwordConfirm) {
-            await resetPassword(token, password, passwordConfirm);
+            await modifyPassword(token, password, passwordConfirm);
             sendResponse(res, statusCode.ok, '', 'The password changed successfully');
         }
     }

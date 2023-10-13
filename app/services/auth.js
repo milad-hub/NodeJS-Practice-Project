@@ -34,7 +34,7 @@ const authenticateUser = async (username, password) => {
     return signedToken;
 };
 
-const forgotPassword = async (email) => {
+const sendPasswordResetEmail = async (email) => {
 
     const user = await getUserByEmail(email);
     const resetToken = user.createPasswordResetToken();
@@ -57,7 +57,7 @@ const forgotPassword = async (email) => {
     }
 };
 
-const resetPassword = async (token, password, passwordConfirm) => {
+const modifyPassword = async (token, password, passwordConfirm) => {
     const user = await User.findOne({
         passwordResetToken: token,
         passwordResetExpires: { $gt: Date.now() }
@@ -133,8 +133,8 @@ const isUserActive = async (userId) => {
 
 module.exports = {
     authenticateUser,
-    forgotPassword,
-    resetPassword,
+    sendPasswordResetEmail,
+    modifyPassword,
     decodeToken,
     encryptToken,
     decryptToken,

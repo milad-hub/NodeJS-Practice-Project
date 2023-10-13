@@ -73,6 +73,16 @@ class CommonServices {
         return filteredQuery;
     };
 
+    extractAllowedFields(formData, allowedFields) {
+        const extractedData = {};
+        formData.forEach((value, key) => {
+            if (allowedFields.includes(key)) {
+                extractedData[key] = value;
+            }
+        });
+        return extractedData;
+    }
+
     //////////////////////////////////////////////////////////////////////////////////
 
     static handleNumberInstance(value, filteredQuery, key) {
