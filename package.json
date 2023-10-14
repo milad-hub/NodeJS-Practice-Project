@@ -20,9 +20,14 @@
     "crypto-js": "^4.1.1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^7.1.1",
+    "helmet": "^7.0.0",
+    "hpp": "^0.2.3",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.4.5",
     "node": "^20.5.0",
-    "nodemailer": "^6.9.6"
+    "nodemailer": "^6.9.6",
+    "xss": "^1.0.14"
   }
 }

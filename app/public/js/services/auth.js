@@ -10,10 +10,6 @@ class AuthServices {
     async loginUser(userData) {
         try {
             const response = await this.httpClient.request('auth/login', httpMethods.POST, httpHeaders.content.json, userData);
-
-            const token = response.token;
-            document.cookie = `token=${token}; path=/`;
-
             return response;
         } catch (error) {
             throw error;

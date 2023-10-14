@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const helmet = require('helmet');
 const { globalErrorHandler, routeNotFoundHandler } = require('../middlewares/error.middleware');
 const { handleDbErrors } = require('../helpers/handlers/error');
 const { isDevEnvironment } = require('../helpers/common');
@@ -9,6 +10,7 @@ const webTemplate = require('../routes/template.routes');
 const auth = require('../routes/auth.routes');
 const user = require('../routes/user.routes');
 const { role } = require('../models/user');
+const { helmetOptions } = require('./config');
 
 module.exports = (app) => {
 
@@ -27,7 +29,7 @@ module.exports = (app) => {
 
     app
         .use('/web', authGuard([role.admin, role.user]), webTemplate)
-        .use('/api/user', authGuard([role.admin]), user);
+        .use('/api/user', authGuard([role.admin]), helmet(helmetOptions), user);
 
     app
         .all('*', routeNotFoundHandler)

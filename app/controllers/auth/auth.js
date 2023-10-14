@@ -3,7 +3,7 @@ const { sendResponse } = require('../../helpers/handlers/response');
 const { handleAsyncErrors, AppError } = require('../../helpers/handlers/error');
 const { statusCode, emailRegex } = require('../../config/config');
 const { storeToken, revokeToken } = require('../../services/token');
-const { authenticateUser, getUserIdByUsername, decryptToken, encryptToken, sendPasswordResetEmail, modifyPassword } = require('../../services/auth');
+const { authenticateUser, getUserIdByUsername, decryptToken, encryptToken, sendPasswordResetEmail, modifyPassword, getUserByEmail } = require('../../services/auth');
 
 class AuthController {
 
@@ -24,6 +24,7 @@ class AuthController {
             await storeToken(userId, token);
             const encryptedToken = encryptToken(token);
 
+            // { secure: true } flag only when connection is on https
             res.cookie('token', encryptedToken, { httpOnly: true });
             res.redirect('/web/users');
         } else {
@@ -57,14 +58,20 @@ class AuthController {
         res.redirect('/auth');
     }
 
-    forgotPassword(req, res, next) {
+    async forgotPassword(req, res, next) {
         const { email } = req.body;
 
         if (!emailRegex.test(email) || email.includes('+')) {
             throw new AppError('Invalid email format!', statusCode.badRequest);
         }
 
-        sendPasswordResetEmail(email);
+        const user = await getUserByEmail(email);
+
+        if (!user) {
+            return next(new AppError('The email is not registered!', statusCode.badRequest));
+        }
+
+        sendPasswordResetEmail(user);
         sendResponse(res, statusCode.ok, '', 'The reset password email sent successfully');
     }
 

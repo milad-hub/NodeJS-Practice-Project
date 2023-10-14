@@ -34,9 +34,8 @@ const authenticateUser = async (username, password) => {
     return signedToken;
 };
 
-const sendPasswordResetEmail = async (email) => {
+const sendPasswordResetEmail = async (user) => {
 
-    const user = await getUserByEmail(email);
     const resetToken = user.createPasswordResetToken();
 
     await user.save({ validateBeforeSave: false });
@@ -134,6 +133,7 @@ const isUserActive = async (userId) => {
 module.exports = {
     authenticateUser,
     sendPasswordResetEmail,
+    getUserByEmail,
     modifyPassword,
     decodeToken,
     encryptToken,

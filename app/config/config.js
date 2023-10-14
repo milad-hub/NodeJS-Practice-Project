@@ -1,3 +1,5 @@
+const rateLimit = require('express-rate-limit');
+
 const statusCode = {
     ok: 200,
     created: 201,
@@ -16,9 +18,47 @@ const statusCode = {
     gatewayTimeout: 504
 };
 
+const limiter = rateLimit({
+    windowMs: 5 * 60 * 1000,
+    max: 500,
+    message: 'Too many requests from this IP, please try again after an hour',
+    headers: 'draft-7'
+});
+
+const helmetOptions = {
+    contentSecurityPolicy: {
+        useDefaults: false,
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'"],
+            styleSrc: ["'self'"],
+            imgSrc: ["'self'"],
+            fontSrc: ["'self'"],
+            objectSrc: ["'none'"],
+            upgradeInsecureRequests: [],
+        },
+    },
+    frameguard: { action: 'deny' },
+    hsts: { maxAge: 31536000, includeSubDomains: true, preload: true },
+    ieNoOpen: true,
+    noSniff: true,
+    referrerPolicy: { policy: 'same-origin' },
+};
+
+const hppOptions = {
+    whitelist: [
+        'duration',
+        'sort',
+        'age'
+    ]
+};
+
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 module.exports = {
     statusCode,
-    emailRegex
+    emailRegex,
+    limiter,
+    helmetOptions,
+    hppOptions
 };
