@@ -9,6 +9,12 @@ const templates = {
         table: fs.readFileSync(`${__dirname}/../views/users/list/html/table.html`, 'utf-8'),
         userDetails: fs.readFileSync(`${__dirname}/../views/users/list/html/user-details.html`, 'utf-8'),
     },
+    blog: {
+        index: fs.readFileSync(`${__dirname}/../views/blog/index.html`, 'utf-8'),
+        list: fs.readFileSync(`${__dirname}/../views/blog/list/html/index.html`, 'utf-8'),
+        details: fs.readFileSync(`${__dirname}/../views/blog/details/html/index.html`, 'utf-8'),
+
+    },
     userDetails: fs.readFileSync(`${__dirname}/../views/users/details/index.html`, 'utf-8'),
     auth: fs.readFileSync(`${__dirname}/../views/auth/html/index.html`, 'utf-8')
 };

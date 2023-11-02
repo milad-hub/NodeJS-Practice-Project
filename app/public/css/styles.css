@@ -37,12 +37,12 @@ tr.blue-background th {
 .display__toast {
   position: fixed;
   bottom: 10px;
-  left: 10px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 1000;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
 }
-
 
 .display__toast.show {
   opacity: 1;

@@ -1,0 +1,84 @@
+<head>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        .header__title {
+            height: 30px;
+        }
+
+        .main-content {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px;
+        }
+
+        .sidebar {
+            width: 300px;
+            padding: 10px;
+        }
+
+        .blog-posts {
+            flex-grow: 1;
+        }
+
+        .blog-post {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 20px;
+        }
+
+        .blog-post__title {
+            font-size: 24px;
+        }
+
+        .blog-post__author {
+            font-size: 16px;
+        }
+
+        .blog-post__content {
+            color: #555;
+        }
+
+        .footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 20px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="header__title"></div>
+    </div>
+
+    <div class="main-content">
+        <div class="sidebar sidebar-left">
+        </div>
+
+        <div class="blog-posts">
+            {%BLOG_POSTS%}
+        </div>
+
+        <div class="sidebar sidebar-right">
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2023 Simple Blog. All rights reserved.</p>
+    </div>
+</body>
