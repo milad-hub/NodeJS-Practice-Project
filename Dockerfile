@@ -1,3 +1,4 @@
+#To run project on docker use: docker-compose up --build
 FROM node:latest
 
 WORKDIR /usr/src/app
