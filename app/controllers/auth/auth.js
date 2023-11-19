@@ -3,7 +3,8 @@ const { sendResponse } = require('../../helpers/handlers/response');
 const { handleAsyncErrors, AppError } = require('../../helpers/handlers/error');
 const { statusCode, emailRegex } = require('../../config/config');
 const { storeToken, revokeToken } = require('../../services/token');
-const { authenticateUser, getUserIdByUsername, decryptToken, encryptToken, sendPasswordResetEmail, modifyPassword, getUserByEmail } = require('../../services/auth');
+const { authenticateUser, getUserIdByUsername, sendPasswordResetEmail, modifyPassword, getUserByEmail } = require('../../services/auth');
+const { storeUserInfoInRedisCache } = require('../../services/redis');
 
 class AuthController {
 
@@ -22,10 +23,10 @@ class AuthController {
         if (token) {
             const userId = await getUserIdByUsername(username);
             await storeToken(userId, token);
-            const encryptedToken = encryptToken(token);
+            await storeUserInfoInRedisCache(userId);
 
-            // { secure: true } flag only when connection is on https
-            res.cookie('token', encryptedToken, { httpOnly: true });
+            //TODO { secure: true } flag only when connection is on https
+            res.cookie('token', token, { httpOnly: true });
             res.redirect('/web/users');
         } else {
             throw new AppError('Something went wrong', statusCode.internalServerError);
@@ -50,8 +51,7 @@ class AuthController {
         const token = req.cookies.token;
 
         if (token) {
-            const decryptedToken = decryptToken(token);
-            await revokeToken(decryptedToken);
+            await revokeToken(token);
         }
 
         res.clearCookie('token', { httpOnly: true });

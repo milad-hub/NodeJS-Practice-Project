@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const CryptoJS = require('crypto-js');
-const { cryptoSecretKey } = require('../config/auth');
 const { emailRegex } = require('../config/config');
 
 const saltRounds = bcrypt.genSaltSync(12);
@@ -87,7 +85,7 @@ const userSchema = new mongoose.Schema({
     },
     isActive: {
         type: Boolean,
-        default: false,
+        default: true,
         required: true,
         select: false
     },
@@ -125,16 +123,15 @@ userSchema.methods.comparePassword = async function (userPassword, candidatePass
 };
 
 userSchema.methods.createPasswordResetToken = function () {
-    const resetToken = CryptoJS.SHA256(this.email).toString();
-    const encryptedResetToken = CryptoJS.AES.encrypt(resetToken, cryptoSecretKey).toString();
-    this.passwordResetToken = encryptedResetToken;
+    const resetToken = bcrypt.hashSync(this.email, saltRounds).toString();
+    this.passwordResetToken = resetToken;
 
     const currentDate = new Date();
     const tenMinutesLater = new Date(currentDate.getTime() + 10 * 60000);
 
     this.passwordResetExpires = tenMinutesLater;
 
-    return encryptedResetToken;
+    return resetToken;
 };
 
 

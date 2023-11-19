@@ -2,6 +2,7 @@ version: '3.9'
 
 services:
   node_app:
+    container_name: nodejs_app
     build: .
     working_dir: /usr/src/app
     ports:
@@ -10,9 +11,17 @@ services:
       NODE_ENV: development
     depends_on:
       - mongodb
+      - redis
     command: "node server.js"
 
   mongodb:
+    container_name: MongoDB
     image: mongo
     ports:
       - "27017:27017"
+
+  redis:
+    container_name: Redis
+    image: redis
+    ports:
+      - "6379:6379"

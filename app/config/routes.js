@@ -21,7 +21,7 @@ module.exports = (app) => {
 
     app
         .get('/', (req, res) => {
-            res.redirect('/blog');
+            res.redirect('/web');
         })
         .use(express.static(path.join(__dirname, '../')));
 

@@ -1,10 +1,9 @@
 const jwt = require('jsonwebtoken');
-const CryptoJS = require('crypto-js');
 const { User } = require('../models/user');
 const { AppError } = require('../helpers/handlers/error');
 const sendMail = require('../helpers/sendMail');
 const { statusCode } = require('../config/config');
-const { jwtSecretKey, cryptoSecretKey, baseUrl } = require('../config/auth');
+const { jwtSecretKey, baseUrl } = require('../config/auth');
 const { resetPasswordEmailOptions } = require('../config/email');
 
 const authenticateUser = async (username, password) => {
@@ -29,7 +28,7 @@ const authenticateUser = async (username, password) => {
         throw new AppError('User is not activated', statusCode.unauthorized);
     }
 
-    const signedToken = signToken(user._id, user.role);
+    const signedToken = signToken(user._id);
 
     return signedToken;
 };
@@ -75,28 +74,16 @@ const modifyPassword = async (token, password, passwordConfirm) => {
 };
 
 
-const signToken = (userId, userRole) => {
-    const token = jwt.sign({ id: userId, role: userRole }, jwtSecretKey, {
+const signToken = (userId) => {
+    const token = jwt.sign({ id: userId }, jwtSecretKey, {
         expiresIn: 3600
     });
     return token;
 };
 
 const decodeToken = (token) => {
-    const decryptedToken = decryptToken(token);
-    const decoded = jwt.verify(decryptedToken, jwtSecretKey);
+    const decoded = jwt.verify(token, jwtSecretKey);
     return decoded;
-};
-
-const encryptToken = (signedToken) => {
-    const token = CryptoJS.AES.encrypt(JSON.stringify(signedToken), cryptoSecretKey).toString();
-    return token;
-};
-
-const decryptToken = (encryptedToken) => {
-    const bytes = CryptoJS.AES.decrypt(encryptedToken, cryptoSecretKey);
-    const token = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-    return token;
 };
 
 const getUserByEmail = async (email) => {
@@ -136,8 +123,6 @@ module.exports = {
     getUserByEmail,
     modifyPassword,
     decodeToken,
-    encryptToken,
-    decryptToken,
     getUserIdByUsername,
     isUserValid,
     isUserActive

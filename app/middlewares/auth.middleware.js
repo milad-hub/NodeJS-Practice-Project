@@ -1,5 +1,6 @@
 const { handleAsyncErrors } = require('../helpers/handlers/error');
 const { decodeToken, isUserActive } = require('../services/auth');
+const { getUserRoleFromRedisCache } = require('../services/redis');
 
 const authGuard = (allowedRoles) => {
     return handleAsyncErrors(async (req, res, next) => {
@@ -17,7 +18,9 @@ const authGuard = (allowedRoles) => {
                 return res.redirect('/auth');
             }
 
-            if (!allowedRoles.includes(user.role)) {
+            const userRoles = await getUserRoleFromRedisCache(user.id);
+
+            if (!allowedRoles.includes(userRoles) || !userRoles) {
                 return res.redirect('/auth/403');
             }
 
