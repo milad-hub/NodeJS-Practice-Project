@@ -1,12 +1,10 @@
-require('dotenv').config({ path: './config.env' });
 const mongoose = require('mongoose');
-const { isDevEnvironment } = require('../helpers/common');
 
 module.exports = async () => {
     try {
-        const DATABASE_ADDRESS = isDevEnvironment ? process.env.DATABASE_LOCAL : process.env.DATABASE;
+        const DATABASE_CONNECTION = process.env.DATABASE_CONNECTION;
 
-        await mongoose.connect(DATABASE_ADDRESS, {
+        await mongoose.connect(DATABASE_CONNECTION, {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });

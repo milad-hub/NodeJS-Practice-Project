@@ -12,7 +12,7 @@ services:
     depends_on:
       - mongodb
       - redis
-    command: "node server.js"
+    command: "node --env-file environments/docker.env server.js"
 
   mongodb:
     container_name: MongoDB

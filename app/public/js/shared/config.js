@@ -1,8 +1,4 @@
-const isDevEnvironment = () => {
-    return process.env.NODE_ENV === 'development';
-};
-
-const baseApiUrl = isDevEnvironment ? 'http://127.0.0.1:3000' : 'http://127.0.0.1:3000';
+const baseApiUrl = 'http://127.0.0.1:3000';
 
 
 const httpMethods = {
@@ -48,7 +44,6 @@ const httpHeaders = {
 };
 
 export {
-    isDevEnvironment,
     baseApiUrl,
     httpHeaders,
     httpMethods,

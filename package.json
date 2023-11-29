@@ -4,9 +4,10 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "app:dev": "nodemon server.js",
-    "app:prod": "set NODE_ENV=production && node server.js",
-    "app:debug": "ndb server.js"
+    "app:dev": "nodemon --env-file environments/development.env server.js",
+    "app:prod": "node --env-file environments/production.env server.js",
+    "app:debug": "ndb server.js",
+    "app:docker": "docker-compose up --build"
   },
   "author": "",
   "license": "ISC",
@@ -17,7 +18,6 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
-    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-mongo-sanitize": "^2.2.0",
     "express-rate-limit": "^7.1.1",
